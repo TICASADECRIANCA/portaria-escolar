@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portaria Pro | Sistema Escolar</title>
+    <title>Portaria Pro | Gestão Escolar</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         :root {
@@ -28,7 +28,6 @@
         .card-aluno { border-top: 10px solid var(--primary); }
         .card-saude { border-top: 10px solid var(--health); }
 
-        /* FONTE DO NOME DIMINUÍDA CONFORME SOLICITADO */
         .aluno-nome { font-size: 28px; font-weight: 800; color: var(--danger); display: block; text-transform: uppercase; margin: 5px 0; }
         .aluno-turma { font-size: 18px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 15px; }
         
@@ -42,7 +41,12 @@
         .auth-row:last-child { border: none; }
 
         .alerta-box { background: #fff4e5; border: 1px solid #ffe1ba; padding: 15px; border-radius: 12px; margin-top: 15px; }
-        .btn { padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        
+        /* Botões */
+        .btn { padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-danger { background: var(--danger); color: white; margin-top: 20px; width: 100%; }
+        .btn-danger:hover { background: #b22222; }
+        
         .hidden { display: none; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -57,28 +61,37 @@
         <h2 style="margin:0 0 10px 0; color: var(--primary);">Portaria Ativa</h2>
         <input type="text" id="busca" placeholder="🔍 Buscar nome do aluno...">
         <div style="margin-top: 10px;">
-            <button class="btn" style="background:#eee; font-size: 12px;" onclick="toggleAdmin()">Admin</button>
+            <button class="btn" style="background:#eee; font-size: 12px;" onclick="toggleAdmin()">⚙️ Área Administrativa</button>
         </div>
     </div>
 
     <div id="resultado" class="resultado-wrapper"></div>
 
     <div id="painel-adm" class="hidden" style="text-align:center;">
-        <div class="card" style="margin:auto; border: 2px dashed var(--primary);">
-            <h3>Importar CSV</h3>
-            <input type="password" id="senha-adm" placeholder="Senha">
-            <div id="import-controls" class="hidden">
-                <input type="file" id="csvFile" accept=".csv" style="margin: 20px 0;">
-                <button class="btn" style="background:var(--primary); color:white; width:100%;" onclick="importarCSV()">IMPORTAR</button>
+        <div class="card" style="margin:auto; border: 2px dashed var(--primary); max-width: 500px;">
+            <h3>Painel do Administrador</h3>
+            <div id="admin-auth">
+                <input type="password" id="senha-adm" placeholder="Senha">
+                <button class="btn" style="background:#333; color:white; width:100%; margin-top:10px;" onclick="loginAdm()">Acessar</button>
             </div>
-            <button class="btn" id="btn-login-adm" style="background:#333; color:white; width:100%; margin-top:10px;" onclick="loginAdm()">Liberar</button>
+            
+            <div id="import-controls" class="hidden">
+                <p style="font-size: 14px; color: #666;">Selecione o arquivo CSV (UTF-8) para importar:</p>
+                <input type="file" id="csvFile" accept=".csv" style="margin-bottom: 20px;">
+                <button class="btn" style="background:var(--primary); color:white; width:100%;" onclick="importarCSV()">EFETUAR IMPORTAÇÃO</button>
+                
+                <hr style="margin: 30px 0; opacity: 0.2;">
+                
+                <p style="font-size: 13px; color: var(--danger);"><strong>Atenção:</strong> A ação abaixo apagará TODOS os registros atuais.</p>
+                <button class="btn btn-danger" onclick="limparBaseDados()">🔥 LIMPAR TODA A BASE DE DADOS</button>
+            </div>
         </div>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyC67PDC576cb9FSbwExmG5RTRIaevM0vPE",
@@ -92,14 +105,16 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Gestão de Admin
     window.toggleAdmin = () => document.getElementById('painel-adm').classList.toggle('hidden');
     window.loginAdm = () => {
         if(document.getElementById('senha-adm').value === "admin123") {
             document.getElementById('import-controls').classList.remove('hidden');
-            document.getElementById('btn-login-adm').classList.add('hidden');
+            document.getElementById('admin-auth').classList.add('hidden');
         } else { alert("Senha incorreta"); }
     };
 
+    // Busca com acentuação e fonte ajustada
     document.getElementById('busca').addEventListener('input', async (e) => {
         const termo = e.target.value.toLowerCase();
         const resDiv = document.getElementById('resultado');
@@ -109,8 +124,8 @@
         const snap = await getDocs(q);
         resDiv.innerHTML = "";
 
-        snap.forEach(doc => {
-            const d = doc.data();
+        snap.forEach(docSnap => {
+            const d = docSnap.data();
             if (d.aluno && d.aluno.toLowerCase().includes(termo)) {
                 resDiv.innerHTML += `
                     <div class="card card-aluno">
@@ -151,28 +166,38 @@
         });
     });
 
-    // AJUSTE PARA ACENTUAÇÃO (Encoding: UTF-8)
+    // Importação
     window.importarCSV = function() {
         const file = document.getElementById('csvFile').files[0];
         if(!file) return alert("Selecione o arquivo!");
-        
         Papa.parse(file, {
             header: true,
-            encoding: "UTF-8", // Garante a leitura de acentos
-            skipEmptyLines: true,
+            encoding: "UTF-8",
             complete: async (res) => {
-                let count = 0;
                 for (const item of res.data) {
-                    if(item.aluno) {
-                        await addDoc(collection(db, "alunos"), item);
-                        count++;
-                    }
+                    if(item.aluno) await addDoc(collection(db, "alunos"), item);
                 }
-                alert(count + " registros importados com sucesso!");
+                alert("Importação concluída!");
                 location.reload();
             }
         });
-    }
+    };
+
+    // FUNÇÃO PARA LIMPAR BASE DE DADOS
+    window.limparBaseDados = async function() {
+        if (confirm("VOCÊ TEM CERTEZA? Isso apagará todos os alunos do banco de dados definitivamente!")) {
+            const btn = event.target;
+            btn.innerText = "⏳ APAGANDO...";
+            btn.disabled = true;
+
+            const snap = await getDocs(collection(db, "alunos"));
+            const batch = snap.docs.map(d => deleteDoc(doc(db, "alunos", d.id)));
+            
+            await Promise.all(batch);
+            alert("O banco de dados foi limpo!");
+            location.reload();
+        }
+    };
 </script>
 </body>
 </html>
