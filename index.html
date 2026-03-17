@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portaria Pro | Contatos Rápidos</title>
+    <title>Portaria Pro | Sistema Completo</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         :root {
@@ -19,42 +19,41 @@
         .container { width: 100%; max-width: 1300px; margin: auto; }
         
         .search-box { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 25px; text-align: center; }
-        input[type="text"] { width: 100%; max-width: 500px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 18px; outline: none; }
+        input[type="text"], input[type="password"] { width: 100%; max-width: 500px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 18px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); }
 
-        .resultado-wrapper { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .resultado-wrapper { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; animation: fadeIn 0.5s ease; }
 
-        .card { background: var(--white); border-radius: 20px; padding: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); flex: 1; min-width: 350px; max-width: 600px; box-sizing: border-box; }
+        /* Cards */
+        .card { background: var(--white); border-radius: 20px; padding: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); flex: 1; min-width: 350px; max-width: 600px; box-sizing: border-box; position: relative; }
         .card-aluno { border-top: 10px solid var(--primary); }
         .card-saude { border-top: 10px solid var(--health); }
 
-        .aluno-nome { font-size: 18px; font-weight: 800; color: var(--danger); text-transform: uppercase; margin: 5px 0; display: block; }
+        /* Labels e Textos */
+        .aluno-nome { font-size: 28px; font-weight: 800; color: var(--danger); display: block; text-transform: uppercase; margin: 5px 0; }
+        .aluno-turma { font-size: 18px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 15px; }
+        .saude-title { font-size: 20px; font-weight: 700; color: var(--health); border-bottom: 2px solid #e0f2f1; padding-bottom: 8px; margin-bottom: 15px; }
         .label { font-size: 11px; text-transform: uppercase; color: #70757a; font-weight: 800; display: block; margin-top: 12px; }
-        .data { font-size: 16px; color: #202124; font-weight: 600; }
-        
-        /* Estilo dos Links de Ação */
-        .acoes-contato { display: flex; gap: 10px; margin-top: 5px; }
-        .btn-contato { 
-            text-decoration: none; 
-            font-size: 13px; 
-            font-weight: bold; 
-            padding: 5px 10px; 
-            border-radius: 6px; 
-            display: flex; 
-            align-items: center; 
-            gap: 5px; 
-            transition: 0.2s;
-        }
+        .data { font-size: 16px; color: #202124; font-weight: 600; display: block; }
+
+        /* Grid de Autorizados */
+        .grid-auth { display: grid; gap: 8px; margin-top: 10px; background: #f1f8ff; padding: 15px; border-radius: 12px; }
+        .auth-row { border-bottom: 1px solid #d0e3ff; padding: 8px 0; display: flex; flex-direction: column; }
+        .auth-row:last-child { border: none; }
+        .auth-info { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+
+        /* Botões de Contato */
+        .acoes-contato { display: flex; gap: 8px; margin-top: 5px; }
+        .btn-link { text-decoration: none; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; gap: 4px; }
         .btn-tel { background: #e8f0fe; color: var(--primary); }
         .btn-wpp { background: #e6fcf0; color: var(--whatsapp); }
-        .btn-contato:hover { opacity: 0.8; transform: scale(1.02); }
-
-        .grid-auth { display: grid; gap: 8px; margin-top: 10px; background: #f1f8ff; padding: 12px; border-radius: 12px; }
-        .auth-row { border-bottom: 1px solid #d0e3ff; padding: 8px 0; font-size: 14px; }
-        .auth-row:last-child { border: none; }
 
         .alerta-box { background: #fff4e5; border: 1px solid #ffe1ba; padding: 15px; border-radius: 12px; margin-top: 15px; }
+        .live-tag { position: absolute; top: 10px; right: 20px; color: var(--whatsapp); font-size: 10px; font-weight: bold; }
+
         .btn { padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
         .hidden { display: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -64,7 +63,7 @@
         <h2 style="margin:0 0 10px 0; color: var(--primary);">Portaria Ativa</h2>
         <input type="text" id="busca" placeholder="🔍 Buscar nome do aluno...">
         <div style="margin-top: 10px;">
-            <button class="btn" style="background:#eee; font-size: 12px;" onclick="toggleAdmin()">⚙️ Configurações</button>
+            <button class="btn" style="background:#eee; font-size: 12px;" onclick="toggleAdmin()">⚙️ Área Administrativa</button>
         </div>
     </div>
 
@@ -72,21 +71,23 @@
 
     <div id="painel-adm" class="hidden" style="text-align:center;">
         <div class="card" style="margin:auto; border: 2px dashed var(--primary); max-width: 500px;">
-            <h3>Admin</h3>
-            <input type="password" id="senha-adm" placeholder="Senha">
+            <h3>Painel Admin</h3>
+            <div id="admin-auth">
+                <input type="password" id="senha-adm" placeholder="Senha">
+                <button class="btn" style="background:#333; color:white; width:100%; margin-top:10px;" onclick="loginAdm()">Acessar</button>
+            </div>
             <div id="import-controls" class="hidden">
                 <input type="file" id="csvFile" accept=".csv" style="margin: 20px 0;">
                 <button class="btn" style="background:var(--primary); color:white; width:100%;" onclick="importarCSV()">IMPORTAR CSV</button>
                 <button class="btn" style="background:var(--danger); color:white; width:100%; margin-top:20px;" onclick="limparBaseDados()">🔥 LIMPAR BASE</button>
             </div>
-            <button class="btn" id="btn-login-adm" style="background:#333; color:white; width:100%; margin-top:10px;" onclick="loginAdm()">Acessar</button>
         </div>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyC67PDC576cb9FSbwExmG5RTRIaevM0vPE",
@@ -100,95 +101,93 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Função para limpar números (tirar parênteses, traços e espaços)
     const formatarLinkTel = (num) => num ? num.toString().replace(/\D/g, '') : '';
+    let unsubscribe = null;
 
     window.toggleAdmin = () => document.getElementById('painel-adm').classList.toggle('hidden');
     window.loginAdm = () => {
         if(document.getElementById('senha-adm').value === "admin123") {
             document.getElementById('import-controls').classList.remove('hidden');
-            document.getElementById('btn-login-adm').classList.add('hidden');
-        } else { alert("Senha incorreta"); }
+            document.getElementById('admin-auth').classList.add('hidden');
+        } else { alert("Senha incorreta!"); }
     };
 
-    document.getElementById('busca').addEventListener('input', async (e) => {
+    document.getElementById('busca').addEventListener('input', (e) => {
         const termo = e.target.value.toLowerCase();
         const resDiv = document.getElementById('resultado');
+        if (unsubscribe) unsubscribe();
         if (termo.length < 3) { resDiv.innerHTML = ""; return; }
 
         const q = query(collection(db, "alunos"));
-        const snap = await getDocs(q);
-        resDiv.innerHTML = "";
-
-        snap.forEach(docSnap => {
-            const d = docSnap.data();
-            if (d.aluno && d.aluno.toLowerCase().includes(termo)) {
-                
-                // Helper para criar botões de contato
-                const criarBotoes = (numero) => {
-                    const limpo = formatarLinkTel(numero);
-                    if(!limpo) return '';
-                    return `
-                        <div class="acoes-contato">
-                            <a href="tel:${limpo}" class="btn-contato btn-tel">📞 Ligar</a>
-                            <a href="https://wa.me/55${limpo}" target="_blank" class="btn-contato btn-wpp">💬 Whats</a>
-                        </div>`;
-                };
-
-                resDiv.innerHTML += `
-                    <div class="card card-aluno">
-                        <span class="label">Aluno(a)</span>
-                        <span class="aluno-nome">${d.aluno}</span>
-                        <span class="label">Mãe / Pai</span>
-                        <span class="data">${d.mae || '-'} | ${d.pai || '-'}</span>
-
-                        <span class="label">Autorizados a Retirar</span>
-                        <div class="grid-auth">
-                            <div class="auth-row"><b>${d.autorizado1 || '-'}</b> ${criarBotoes(d.RETIRAR1_CONTATO)}</div>
-                            <div class="auth-row"><b>${d.autorizado2 || '-'}</b> ${criarBotoes(d.RETIRAR2_CONTATO)}</div>
-                            <div class="auth-row"><b>${d.autorizado3 || '-'}</b> ${criarBotoes(d.RETIRAR3_CONTATO)}</div>
-                        </div>
-                    </div>
+        unsubscribe = onSnapshot(q, (snap) => {
+            resDiv.innerHTML = "";
+            snap.forEach(docSnap => {
+                const d = docSnap.data();
+                if (d.aluno && d.aluno.toLowerCase().includes(termo)) {
                     
-                    <div class="card card-saude">
-                        <div class="saude-title">⚕️ Contatos de Emergência</div>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                            <div>
-                                <span class="label">${d.CONTATO1_PARENTESCO || 'Contato 1'}</span>
-                                <span class="data">${d.CONTATO1_NOME || '-'}</span>
-                                ${criarBotoes(d.CONTATO1)}
+                    const btnContato = (num) => {
+                        const l = formatarLinkTel(num);
+                        if(!l) return '';
+                        return `<div class="acoes-contato">
+                            <a href="tel:${l}" class="btn-link btn-tel">📞 Ligar</a>
+                            <a href="https://wa.me/55${l}" target="_blank" class="btn-link btn-wpp">💬 Whats</a>
+                        </div>`;
+                    };
+
+                    resDiv.innerHTML += `
+                        <div class="card card-aluno">
+                            <div class="live-tag">● LIVE</div>
+                            <span class="label">Aluno(a)</span>
+                            <span class="aluno-nome">${d.aluno}</span>
+                            <span class="aluno-turma">Turma: ${d.ae || '-'}</span>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                                <div><span class="label">Mãe</span><span class="data">${d.mae || '-'}</span></div>
+                                <div><span class="label">Pai</span><span class="data">${d.pai || '-'}</span></div>
                             </div>
-                            <div>
-                                <span class="label">${d.CONTATO2_PARENTESCO || 'Contato 2'}</span>
-                                <span class="data">${d.CONTATO2_NOME || '-'}</span>
-                                ${criarBotoes(d.CONTATO2)}
+                            <span class="label">Autorizados a Retirar</span>
+                            <div class="grid-auth">
+                                <div class="auth-row"><div class="auth-info"><b>1. ${d.autorizado1 || '-'}</b><span>${d.RETIRAR1_PARENTESCO || ''}</span></div>${btnContato(d.RETIRAR1_CONTATO)}</div>
+                                <div class="auth-row"><div class="auth-info"><b>2. ${d.autorizado2 || '-'}</b><span>${d.RETIRAR2_PARENTESCO || ''}</span></div>${btnContato(d.RETIRAR2_CONTATO)}</div>
+                                <div class="auth-row"><b>3. ${d.autorizado3 || '-'}</b> ${btnContato(d.RETIRAR3_CONTATO)}</div>
+                                <div class="auth-row"><b>4. ${d.autorizado4 || '-'}</b> ${btnContato(d.RETIRAR4_CONTATO)}</div>
+                                <div class="auth-row"><b>5. ${d.autorizado5 || '-'}</b> ${btnContato(d.RETIRAR5_CONTATO)}</div>
                             </div>
                         </div>
-                        <div class="alerta-box">
-                            <span class="label" style="color:#a66300; margin:0;">Alergias / Febre</span>
-                            <span class="data" style="font-size:14px;"><b>Alergias:</b> ${d.ALERGIAS || 'Nenhuma'}</span>
-                            <span class="data" style="color:var(--danger); font-size:14px;"><b>Febre:</b> ${d.FEBRE || '-'}</span>
-                        </div>
-                    </div>`;
-            }
+                        <div class="card card-saude">
+                            <div class="saude-title">⚕️ Saúde e Emergência</div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                                <div><span class="label">Contato 1 (${d.CONTATO1_PARENTESCO || ''})</span><span class="data">${d.CONTATO1_NOME || '-'}</span>${btnContato(d.CONTATO1)}</div>
+                                <div><span class="label">Contato 2 (${d.CONTATO2_PARENTESCO || ''})</span><span class="data">${d.CONTATO2_NOME || '-'}</span>${btnContato(d.CONTATO2)}</div>
+                            </div>
+                            <div style="margin-top:10px; border-top: 1px solid #eee; padding-top: 5px;">
+                                <span class="label">Hospital e Plano</span>
+                                <span class="data">${d.HOSPITAL_NOME || '-'}</span>
+                                <span class="data" style="font-size:14px;">${d.PLANO_DE_SAUDE || '-'} (${d.NUM_PLANO || '-'})</span>
+                            </div>
+                            <div class="alerta-box">
+                                <span class="label" style="color:#a66300; margin:0;">Alergias / Febre</span>
+                                <span class="data" style="font-size:14px;"><b>Alergias:</b> ${d.ALERGIAS || 'Nenhuma'}</span>
+                                <span class="data" style="color:var(--danger); font-size:14px;"><b>Febre:</b> ${d.FEBRE || '-'}</span>
+                            </div>
+                        </div>`;
+                }
+            });
         });
     });
 
     window.importarCSV = function() {
         const file = document.getElementById('csvFile').files[0];
-        Papa.parse(file, {
-            header: true, encoding: "UTF-8", complete: async (res) => {
-                for (const item of res.data) { if(item.aluno) await addDoc(collection(db, "alunos"), item); }
-                alert("Importado!"); location.reload();
-            }
-        });
+        Papa.parse(file, { header: true, encoding: "UTF-8", complete: async (res) => {
+            for (const item of res.data) { if(item.aluno) await addDoc(collection(db, "alunos"), item); }
+            alert("Importação concluída!"); location.reload();
+        }});
     };
 
     window.limparBaseDados = async function() {
-        if (confirm("Apagar tudo?")) {
+        if (confirm("Apagar toda a base?")) {
             const snap = await getDocs(collection(db, "alunos"));
-            for (const d of snap.docs) { await deleteDoc(doc(db, "alunos", d.id)); }
-            alert("Limpo!"); location.reload();
+            for (const d of snap.docs) await deleteDoc(doc(db, "alunos", d.id));
+            alert("Base limpa!"); location.reload();
         }
     };
 </script>
