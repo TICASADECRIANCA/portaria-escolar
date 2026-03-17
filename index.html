@@ -20,7 +20,7 @@
             font-family: 'Segoe UI', system-ui, sans-serif; 
             margin: 0; padding: 0; min-height: 100vh;
             background-color: #dfebf7;
-            /* COLOQUE SUA IMAGEM ABAIXO */
+            /* SUBSTITUA PELO NOME DA SUA IMAGEM */
             background-image: url("NOME_DO_SEU_ARQUIVO.jpg");
             background-size: cover;
             background-position: center;
@@ -35,104 +35,97 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.15); backdrop-filter: blur(8px);
         }
         
-        /* --- TELAS DE ACESSO (LOGIN) --- */
+        /* TELAS DE LOGIN */
         #tela-login-inicial {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(26,115,232,0.9) 0%, rgba(162,196,245,0.9) 100%);
+            background: linear-gradient(135deg, rgba(26,115,232,0.95) 0%, rgba(162,196,245,0.95) 100%);
             display: flex; justify-content: center; align-items: center; z-index: 10000;
         }
-        
         .login-box {
             background: var(--white); padding: 40px; border-radius: 24px; text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2); width: 90%; max-width: 450px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); width: 90%; max-width: 400px;
         }
-
         .btn-escolha {
-            width: 100%; padding: 20px; margin: 10px 0; border: none; border-radius: 15px;
-            font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 18px; margin: 10px 0; border: none; border-radius: 12px;
+            font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s;
         }
         .btn-enfermagem { background: var(--health); color: white; }
         .btn-espera { background: var(--primary); color: white; }
-        .btn-escolha:hover { opacity: 0.9; transform: scale(1.02); }
+        .btn-voltar-login { background: #f1f3f4; color: #555; margin-top: 15px; }
 
-        .btn-voltar {
-            background: #eee; color: #555; padding: 10px 20px; border: none; border-radius: 10px;
-            cursor: pointer; margin-top: 20px; font-weight: bold; width: 100%;
-        }
-
-        /* --- INTERFACE DO SISTEMA --- */
-        .header-sistema { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; }
-        .header-sistema h1 { font-size: 32px; color: var(--primary); margin: 0; font-weight: 800; }
-        .icon-casa-cadeado { width: 45px; height: 45px; fill: var(--primary); }
-
-        .search-box { background: var(--white); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; text-align: center; }
+        /* INTERFACE */
+        .header-sistema { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 15px; }
+        .icon-casa-cadeado { width: 40px; height: 40px; fill: var(--primary); }
+        .search-box { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; text-align: center; position: relative; }
+        
         input[type="text"], input[type="password"] { 
-            width: 100%; padding: 18px; border: 2px solid #e0e0e0; border-radius: 15px; font-size: 20px; outline: none; box-sizing: border-box;
+            width: 100%; padding: 16px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 18px; outline: none; box-sizing: border-box;
         }
 
         .resultado-wrapper { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
-        .card { background: var(--white); border-radius: 20px; padding: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); flex: 1; min-width: 350px; max-width: 600px; position: relative; }
+        .card { background: var(--white); border-radius: 20px; padding: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); flex: 1; min-width: 350px; max-width: 600px; position: relative; }
         .card-aluno { border-top: 10px solid var(--primary); }
         .card-saude { border-top: 10px solid var(--health); }
 
-        .aluno-nome { font-size: 28px; font-weight: 800; color: var(--danger); display: block; text-transform: uppercase; }
-        .label { font-size: 11px; text-transform: uppercase; color: #70757a; font-weight: 800; display: block; margin-top: 12px; }
-        .data { font-size: 16px; color: #202124; font-weight: 600; }
+        .aluno-nome { font-size: 26px; font-weight: 800; color: var(--danger); display: block; text-transform: uppercase; margin: 5px 0; }
+        .label { font-size: 11px; text-transform: uppercase; color: #70757a; font-weight: 800; display: block; margin-top: 10px; }
+        .data { font-size: 15px; color: #202124; font-weight: 600; display: block; }
 
-        .grid-auth { display: grid; gap: 8px; margin-top: 10px; background: #f1f8ff; padding: 15px; border-radius: 12px; }
-        .auth-row { border-bottom: 1px solid #d0e3ff; padding: 8px 0; }
-        .acoes-contato { display: flex; gap: 8px; margin-top: 5px; }
-        .btn-link { text-decoration: none; font-size: 11px; font-weight: bold; padding: 5px 10px; border-radius: 8px; display: flex; align-items: center; gap: 5px; }
+        .grid-auth { display: grid; gap: 8px; margin-top: 10px; background: #f1f8ff; padding: 12px; border-radius: 12px; }
+        .auth-row { border-bottom: 1px solid #d0e3ff; padding: 6px 0; }
+        .auth-info { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 14px; }
+
+        .acoes-contato { display: flex; gap: 6px; margin-top: 4px; }
+        .btn-link { text-decoration: none; font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; gap: 4px; }
         .btn-tel { background: #e8f0fe; color: var(--primary); }
         .btn-wpp { background: #e6fcf0; color: var(--whatsapp); }
 
-        .btn-sair { background: #fdeaea; color: var(--danger); padding: 8px 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; position: absolute; top: 20px; right: 20px; }
+        .alerta-box { background: #fff4e5; border: 1px solid #ffe1ba; padding: 12px; border-radius: 10px; margin-top: 12px; font-size: 14px; }
+        .btn-sair { position: absolute; top: 10px; right: 10px; background: #fee; color: var(--danger); border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: bold; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
 <div id="tela-login-inicial">
-    <div id="step-escolha" class="login-box">
-        <svg class="icon-casa-cadeado" viewBox="0 0 24 24" style="width:70px; margin-bottom:15px;"><path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3z"/></svg>
-        <h1 style="color:var(--primary); margin-bottom:30px;">Casa Segura</h1>
-        <button class="btn-escolha btn-enfermagem" onclick="irParaSenha('enfermagem')">⚕️ ENFERMAGEM</button>
-        <button class="btn-escolha btn-espera" onclick="irParaSenha('espera')">🛋️ SALA DE ESPERA</button>
+    <div id="box-escolha" class="login-box">
+        <svg class="icon-casa-cadeado" viewBox="0 0 24 24" style="width:60px; margin-bottom:10px;"><path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3z"/></svg>
+        <h1 style="color:var(--primary); margin:0 0 25px 0;">Casa Segura</h1>
+        <button class="btn-escolha btn-enfermagem" onclick="abrirSenha('enfermagem')">⚕️ ENFERMAGEM</button>
+        <button class="btn-escolha btn-espera" onclick="abrirSenha('espera')">🛋️ SALA DE ESPERA</button>
     </div>
 
-    <div id="step-senha" class="login-box hidden">
-        <h2 id="titulo-senha" style="margin-bottom:20px;">Senha</h2>
-        <input type="password" id="campo-senha" placeholder="Digite a senha...">
-        <button class="btn-escolha btn-espera" style="margin-top:15px;" onclick="validarSenha()">ENTRAR</button>
-        <button class="btn-voltar" onclick="voltarParaEscolha()">← Voltar</button>
+    <div id="box-senha" class="login-box hidden">
+        <h2 id="txt-perfil" style="margin-bottom:20px;">Senha</h2>
+        <input type="password" id="input-senha" placeholder="Digite a senha...">
+        <button class="btn-escolha btn-espera" style="margin-top:15px;" onclick="conferirSenha()">ENTRAR</button>
+        <button class="btn-escolha btn-voltar-login" onclick="voltarEscolha()">← Voltar</button>
     </div>
 </div>
 
-<div class="container hidden" id="main-sistema">
-    <button class="btn-sair" onclick="sairDoSistema()">🚪 Sair</button>
-    
+<div class="container hidden" id="app-principal">
     <div class="search-box">
+        <button class="btn-sair" onclick="location.reload()">🚪 SAIR</button>
         <div class="header-sistema">
-            <svg class="icon-casa-cadeado" viewBox="0 0 24 24" style="width:40px;"><path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3z"/></svg>
+            <svg class="icon-casa-cadeado" viewBox="0 0 24 24"><path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3z"/></svg>
             <h1>Casa Segura</h1>
         </div>
-        <p style="color: #70757a; margin-bottom: 20px;">Portaria Casa de Criança | Acesso: <b id="label-acesso"></b></p>
-        <input type="text" id="busca" placeholder="🔍 Digite o nome do aluno...">
+        <p style="font-size:13px; color:#666;">Acesso: <b id="label-perfil"></b></p>
+        <input type="text" id="busca" placeholder="🔍 Buscar nome do aluno...">
         
-        <div id="adm-btn-wrapper" class="hidden" style="margin-top:15px;">
-            <button class="btn-voltar" style="width:auto; margin:0;" onclick="toggleAdmin()">⚙️ Admin (CSV)</button>
+        <div id="area-adm" class="hidden" style="margin-top:10px;">
+            <button onclick="document.getElementById('painel-adm').classList.toggle('hidden')" style="font-size:11px; cursor:pointer;">⚙️ Painel Admin</button>
         </div>
     </div>
 
     <div id="resultado" class="resultado-wrapper"></div>
 
-    <div id="painel-adm" class="hidden" style="text-align:center;">
-        <div class="card" style="margin:auto; border: 2px dashed var(--primary); max-width: 500px;">
-            <h3>Importação de Dados</h3>
-            <input type="file" id="csvFile" accept=".csv" style="margin: 20px 0;">
+    <div id="painel-adm" class="hidden" style="text-align:center; margin-bottom: 20px;">
+        <div class="card" style="margin:auto; border: 2px dashed #ccc; max-width: 450px;">
+            <h4>Importar Base de Dados</h4>
+            <input type="file" id="csvFile" accept=".csv" style="margin-bottom:10px;">
             <button class="btn-escolha btn-espera" onclick="importarCSV()">IMPORTAR CSV</button>
-            <button class="btn-voltar" style="background:var(--danger); color:white;" onclick="limparBaseDados()">LIMPAR TUDO</button>
+            <button onclick="limparBase()" style="color:red; margin-top:15px; cursor:pointer; background:none; border:none;">Limpar Toda Base</button>
         </div>
     </div>
 </div>
@@ -153,106 +146,102 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     let unsubscribe = null;
-    let perfilSelecionado = '';
+    let acessoAtivo = "";
 
-    // NAVEGAÇÃO
-    window.irParaSenha = (perfil) => {
-        perfilSelecionado = perfil;
-        document.getElementById('step-escolha').classList.add('hidden');
-        document.getElementById('step-senha').classList.remove('hidden');
-        document.getElementById('titulo-senha').innerText = perfil === 'enfermagem' ? 'Acesso Enfermagem' : 'Acesso Sala de Espera';
-        document.getElementById('campo-senha').focus();
+    // NAVEGAÇÃO LOGIN
+    window.abrirSenha = (p) => {
+        acessoAtivo = p;
+        document.getElementById('box-escolha').classList.add('hidden');
+        document.getElementById('box-senha').classList.remove('hidden');
+        document.getElementById('txt-perfil').innerText = p === 'enfermagem' ? '⚕️ Enfermagem' : '🛋️ Sala de Espera';
+    };
+    window.voltarEscolha = () => {
+        document.getElementById('box-escolha').classList.remove('hidden');
+        document.getElementById('box-senha').classList.add('hidden');
+    };
+    window.conferirSenha = () => {
+        const s = document.getElementById('input-senha').value;
+        if((acessoAtivo === 'enfermagem' && s === '1234') || (acessoAtivo === 'espera' && s === '2026')) {
+            document.getElementById('tela-login-inicial').classList.add('hidden');
+            document.getElementById('app-principal').classList.remove('hidden');
+            document.getElementById('label-perfil').innerText = acessoAtivo.toUpperCase();
+            if(acessoAtivo === 'enfermagem') document.getElementById('area-adm').classList.remove('hidden');
+        } else { alert("Senha Errada!"); }
     };
 
-    window.voltarParaEscolha = () => {
-        document.getElementById('step-escolha').classList.remove('hidden');
-        document.getElementById('step-senha').classList.add('hidden');
-        document.getElementById('campo-senha').value = '';
-    };
-
-    window.validarSenha = () => {
-        const senha = document.getElementById('campo-senha').value;
-        if ((perfilSelecionado === 'enfermagem' && senha === '1234') || 
-            (perfilSelecionado === 'espera' && senha === '2026')) {
-            entrarNoSistema();
-        } else {
-            alert("Senha incorreta!");
-        }
-    };
-
-    function entrarNoSistema() {
-        document.getElementById('tela-login-inicial').classList.add('hidden');
-        document.getElementById('main-sistema').classList.remove('hidden');
-        document.getElementById('label-acesso').innerText = perfilSelecionado.toUpperCase();
-        if(perfilSelecionado === 'enfermagem') document.getElementById('adm-btn-wrapper').classList.remove('hidden');
-    }
-
-    window.sairDoSistema = () => location.reload();
-
-    // BUSCA E FIREBASE
+    // BUSCA E RENDERIZAÇÃO COMPLETA
     document.getElementById('busca').addEventListener('input', (e) => {
         const termo = e.target.value.toLowerCase();
         const resDiv = document.getElementById('resultado');
         if (unsubscribe) unsubscribe();
         if (termo.length < 3) { resDiv.innerHTML = ""; return; }
 
-        const q = query(collection(db, "alunos"));
-        unsubscribe = onSnapshot(q, (snap) => {
+        unsubscribe = onSnapshot(query(collection(db, "alunos")), (snap) => {
             resDiv.innerHTML = "";
             snap.forEach(docSnap => {
                 const d = docSnap.data();
                 if (d.aluno && d.aluno.toLowerCase().includes(termo)) {
-                    const btnContato = (num) => {
-                        const l = num ? num.toString().replace(/\D/g, '') : '';
-                        if(!l) return '';
-                        return `<div class="acoes-contato">
-                            <a href="tel:${l}" class="btn-link btn-tel">📞 Ligar</a>
-                            <a href="https://wa.me/55${l}" target="_blank" class="btn-link btn-wpp">💬 Whats</a>
-                        </div>`;
+                    const btnC = (n) => {
+                        const num = n ? n.toString().replace(/\D/g, '') : '';
+                        return num ? `<div class="acoes-contato"><a href="tel:${num}" class="btn-link btn-tel">📞 Ligar</a><a href="https://wa.me/55${num}" target="_blank" class="btn-link btn-wpp">💬 Whats</a></div>` : '';
                     };
 
-                    let cardSaude = '';
-                    if (perfilSelecionado === 'enfermagem') {
-                        cardSaude = `
-                        <div class="card card-saude">
-                            <span class="saude-title">⚕️ Saúde e Emergência</span>
-                            <span class="label">Contatos</span>
-                            <div style="font-size:14px;">${d.CONTATO1_NOME || '-'} ${btnContato(d.CONTATO1)}</div>
-                            <div class="alerta-box">
-                                <b>Alergias:</b> ${d.ALERGIAS || 'Nenhuma'}<br>
-                                <b>Febre:</b> ${d.FEBRE || '-'}
-                            </div>
-                        </div>`;
-                    }
-
-                    resDiv.innerHTML += `
+                    // CARD ALUNO COM OS 5 AUTORIZADOS RESTAURADOS
+                    let html = `
                         <div class="card card-aluno">
                             <span class="label">Aluno(a)</span>
                             <span class="aluno-nome">${d.aluno}</span>
-                            <span class="label">Autorizados</span>
-                            <div class="grid-auth">
-                                <div class="auth-row"><b>1. ${d.autorizado1 || '-'}</b> ${btnContato(d.RETIRAR1_CONTATO)}</div>
-                                <div class="auth-row"><b>2. ${d.autorizado2 || '-'}</b> ${btnContato(d.RETIRAR2_CONTATO)}</div>
+                            <span class="aluno-turma">Turma: ${d.ae || '-'}</span>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                                <div><span class="label">Mãe</span><span class="data">${d.mae || '-'}</span></div>
+                                <div><span class="label">Pai</span><span class="data">${d.pai || '-'}</span></div>
                             </div>
-                        </div>${cardSaude}`;
+                            <span class="label">Autorizados a Retirar</span>
+                            <div class="grid-auth">
+                                <div class="auth-row"><div class="auth-info"><b>1. ${d.autorizado1 || '-'}</b><span>${d.RETIRAR1_PARENTESCO || ''}</span></div>${btnC(d.RETIRAR1_CONTATO)}</div>
+                                <div class="auth-row"><div class="auth-info"><b>2. ${d.autorizado2 || '-'}</b><span>${d.RETIRAR2_PARENTESCO || ''}</span></div>${btnC(d.RETIRAR2_CONTATO)}</div>
+                                <div class="auth-row"><b>3. ${d.autorizado3 || '-'}</b> ${btnC(d.RETIRAR3_CONTATO)}</div>
+                                <div class="auth-row"><b>4. ${d.autorizado4 || '-'}</b> ${btnC(d.RETIRAR4_CONTATO)}</div>
+                                <div class="auth-row"><b>5. ${d.autorizado5 || '-'}</b> ${btnC(d.RETIRAR5_CONTATO)}</div>
+                            </div>
+                        </div>`;
+
+                    // CARD SAÚDE RESTAURADO (Só para Enfermagem)
+                    if (acessoAtivo === 'enfermagem') {
+                        html += `
+                        <div class="card card-saude">
+                            <div class="saude-title">⚕️ Saúde e Emergência</div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                                <div><span class="label">Contato 1 (${d.CONTATO1_PARENTESCO || ''})</span><span class="data">${d.CONTATO1_NOME || '-'}</span>${btnC(d.CONTATO1)}</div>
+                                <div><span class="label">Contato 2 (${d.CONTATO2_PARENTESCO || ''})</span><span class="data">${d.CONTATO2_NOME || '-'}</span>${btnC(d.CONTATO2)}</div>
+                            </div>
+                            <span class="label">Hospital e Plano</span>
+                            <span class="data">${d.HOSPITAL_NOME || '-'}</span>
+                            <span class="data" style="font-size:13px;">${d.PLANO_DE_SAUDE || '-'} (${d.NUM_PLANO || '-'})</span>
+                            <div class="alerta-box">
+                                <b>Alergias:</b> ${d.ALERGIAS || 'Nenhuma'}<br>
+                                <b style="color:var(--danger)">Febre:</b> ${d.FEBRE || '-'}
+                            </div>
+                        </div>`;
+                    }
+                    resDiv.innerHTML += html;
                 }
             });
         });
     });
 
     // ADMIN
-    window.toggleAdmin = () => document.getElementById('painel-adm').classList.toggle('hidden');
-    window.importarCSV = function() {
+    window.importarCSV = () => {
         const file = document.getElementById('csvFile').files[0];
-        Papa.parse(file, { header: true, complete: async (res) => {
-            for (const item of res.data) { if(item.aluno) await addDoc(collection(db, "alunos"), item); }
-            alert("Importado!");
+        Papa.parse(file, { header: true, complete: async (r) => {
+            for(const i of r.data) { if(i.aluno) await addDoc(collection(db, "alunos"), i); }
+            alert("Sucesso!");
         }});
     };
-    window.limparBaseDados = async function() {
-        if (confirm("Apagar tudo?")) {
-            const snap = await getDocs(collection(db, "alunos"));
-            for (const d of snap.docs) await deleteDoc(doc(db, "alunos", d.id));
+    window.limparBase = async () => {
+        if(confirm("Apagar tudo?")) {
+            const s = await getDocs(collection(db, "alunos"));
+            for(const d of s.docs) await deleteDoc(doc(db, "alunos", d.id));
             alert("Limpo!");
         }
     };
