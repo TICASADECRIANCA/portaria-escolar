@@ -3,200 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portaria Escolar Pro</title>
+    <title>Portaria Escolar - Segurança</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        /* --- ESTILOS GERAIS --- */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; padding: 20px; display: flex; justify-content: center; color: #333; }
-        .container { width: 100%; max-width: 800px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        h1, h2 { text-align: center; color: #1a73e8; margin-bottom: 25px; }
+        :root { --primary: #1a73e8; --danger: #d93025; --success: #188038; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f1f3f4; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 600px; background: white; padding: 25px; border-radius: 12px; shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        
+        /* Tela de Login Simples */
+        #tela-login { text-align: center; padding: 50px 20px; }
+        
+        /* Interface de Busca */
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #dadce0; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        
+        /* Card do Aluno */
+        .card-liberacao { background: #fff; border: 2px solid var(--primary); border-radius: 15px; padding: 20px; margin-top: 20px; animation: fadeIn 0.3s; }
+        .nome-aluno { font-size: 26px; color: var(--danger); font-weight: bold; text-transform: uppercase; display: block; }
+        .autorizados-lista { margin-top: 15px; background: #e8f0fe; padding: 15px; border-radius: 10px; }
+        .autorizado-item { font-size: 18px; color: #202124; font-weight: 600; padding: 8px 0; border-bottom: 1px solid #d0d7de; }
+        .autorizado-item:last-child { border: none; }
 
-        /* --- ESTILOS DAS ABAS (TABS) --- */
-        .tabs { display: flex; justify-content: center; margin-bottom: 30px; border-bottom: 2px solid #ddd; }
-        .tab-btn { padding: 12px 24px; cursor: pointer; border: none; background: none; font-size: 16px; font-weight: bold; color: #5f6368; transition: 0.3s; border-bottom: 3px solid transparent; }
-        .tab-btn.active { color: #1a73e8; border-bottom-color: #1a73e8; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* --- ESTILOS DE FORMULÁRIO (CADASTRO) --- */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; color: #5f6368; font-size: 14px; }
-        input[type="text"], input[type="file"] { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
-        input[type="text"]:focus { border-color: #1a73e8; outline: none; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 20px; }
-        .btn-cadastrar { background-color: #1a73e8; color: white; }
-        .btn-cadastrar:hover { background-color: #1557b0; }
-        .btn-cadastrar:disabled { background-color: #a0c3ff; cursor: not-allowed; }
-
-        /* --- ESTILOS DE BUSCA E CARDS --- */
-        #busca { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 18px; margin-bottom: 25px; box-sizing: border-box; }
-        .aluno-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .aluno-foto { width: 120px; height: 120px; border-radius: 10px; object-fit: cover; border: 4px solid #e8f0fe; }
-        .aluno-info { flex: 1; }
-        .aluno-nome { font-size: 24px; color: #d93025; font-weight: bold; display: block; margin-bottom: 5px; }
-        .aluno-pais { font-size: 14px; color: #5f6368; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #f1f3f4; }
-        .autorizados-box { background: #e8f0fe; padding: 15px; border-radius: 8px; }
-        .aut-label { font-size: 12px; color: #1a73e8; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px; }
-        .aut-item { display: block; font-size: 16px; color: #202124; font-weight: 500; margin-bottom: 4px; }
-        #status-cadastro { text-align: center; margin-top: 15px; font-weight: bold; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-blue { background: var(--primary); color: white; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Portaria Escolar Pro 🏫</h1>
-
-    <div class="tabs">
-        <div class="tab-btn active" onclick="mudarAba('consulta')">🔍 Consultar</div>
-        <div class="tab-btn" onclick="mudarAba('cadastro')">➕ Cadastrar Aluno</div>
+    <div id="area-login">
+        <h2>Acesso à Portaria</h2>
+        <input type="password" id="senha-acesso" placeholder="Digite a senha da escola">
+        <button class="btn btn-blue" onclick="verificarSenha()">ENTRAR</button>
     </div>
 
-    <div id="aba-consulta" class="tab-content active">
-        <input type="text" id="busca" placeholder="🔎 Digite o nome completo do aluno...">
-        <div id="listaResultados"></div>
-    </div>
+    <div id="area-sistema" class="hidden">
+        <div class="header">
+            <h3>SISTEMA DE SAÍDA</h3>
+            <button onclick="location.reload()" style="float: right; font-size: 10px;">Sair</button>
+        </div>
+        
+        <input type="text" id="busca" placeholder="🔎 Nome do Aluno...">
+        
+        <div id="resultado"></div>
 
-    <div id="aba-cadastro" class="tab-content">
-        <h2>Cadastrar Novo Aluno</h2>
-        <div class="form-group">
-            <label>Foto do Aluno (PNG ou JPG)</label>
-            <input type="file" id="cad-foto" accept="image/*">
+        <hr style="margin-top: 50px; opacity: 0.3;">
+        <div style="font-size: 12px; color: #666; text-align: center;">
+            <p>Para importar nova lista, use a função abaixo:</p>
+            <input type="file" id="csvFile" accept=".csv">
+            <button onclick="importarCSV()" style="font-size: 10px;">Importar CSV</button>
         </div>
-        <div class="form-group">
-            <label>Nome Completo do Aluno</label>
-            <input type="text" id="cad-nome" placeholder="Ex: João Silva Sauro">
-        </div>
-        <div class="form-group">
-            <label>Nome da Mãe</label>
-            <input type="text" id="cad-mae">
-        </div>
-        <div class="form-group">
-            <label>Nome do Pai</label>
-            <input type="text" id="cad-pai">
-        </div>
-        <div class="form-group">
-            <label>Autorizado 1 (Nome e Parentesco)</label>
-            <input type="text" id="cad-aut1" placeholder="Ex: Maria Souza (Avó)">
-        </div>
-        <div class="form-group">
-            <label>Autorizado 2</label>
-            <input type="text" id="cad-aut2">
-        </div>
-        <div class="form-group">
-            <label>Autorizado 3</label>
-            <input type="text" id="cad-aut3">
-        </div>
-        <div class="form-group">
-            <label>Autorizado 4</label>
-            <input type="text" id="cad-aut4">
-        </div>
-        <button id="btn-salvar" class="btn btn-cadastrar" onclick="salvarAluno()">💾 SALVAR NO SISTEMA</button>
-        <div id="status-cadastro"></div>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
-    // --- SUAS CREDENCIAIS ---
     const firebaseConfig = {
         apiKey: "AIzaSyC67PDC576cb9FSbwExmG5RTRIaevM0vPE",
         authDomain: "portaria-escolar-f9226.firebaseapp.com",
         projectId: "portaria-escolar-f9226",
-        storageBucket: "portaria-escolar-f9226.firebasestorage.app", // Verifique se este nome está correto no seu console
+        storageBucket: "portaria-escolar-f9226.firebasestorage.app",
         messagingSenderId: "1024003667592",
         appId: "1:1024003667592:web:4faf498c3f39999f75113d"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const storage = getStorage(app); // Inicializa o Storage
 
-    // --- FUNÇÃO DE CADASTRO (SALVAR FOTO + DADOS) ---
-    window.salvarAluno = async function() {
-        const btnSalvar = document.getElementById('btn-salvar');
-        const status = document.getElementById('status-cadastro');
-        const fotoFile = document.getElementById('cad-foto').files[0];
-        const nome = document.getElementById('cad-nome').value;
-        const mae = document.getElementById('cad-mae').value;
-        const pai = document.getElementById('cad-pai').value;
-
-        // Validação básica
-        if (!fotoFile || !nome || (!mae && !pai)) {
-            alert("Erro: A foto, o nome do aluno e pelo menos o nome de um pai/mãe são obrigatórios.");
-            return;
+    // Senha simples para evitar curiosos
+    window.verificarSenha = function() {
+        const senha = document.getElementById('senha-acesso').value;
+        if(senha === "1234") { // ALTERE SUA SENHA AQUI
+            document.getElementById('area-login').classList.add('hidden');
+            document.getElementById('area-sistema').classList.remove('hidden');
+        } else {
+            alert("Senha incorreta!");
         }
+    }
 
-        btnSalvar.disabled = true;
-        btnSalvar.innerText = "⏳ Salvando foto...";
-        status.innerText = "";
-
-        try {
-            // 1. Upload da Foto para o Firebase Storage
-            const nomeArquivo = `alunos/${Date.now()}_${fotoFile.name}`;
-            const storageRef = ref(storage, nomeArquivo);
-            await uploadBytes(storageRef, fotoFile);
-            const fotoUrl = await getDownloadURL(storageRef); // Pega o link da foto
-
-            // 2. Salvar Dados + Link da Foto no Firestore
-            btnSalvar.innerText = "⏳ Salvando dados...";
-            await addDoc(collection(db, "alunos"), {
-                aluno: nome,
-                mae: mae,
-                pai: pai,
-                fotoUrl: fotoUrl, // Vínculo da imagem
-                autorizado1: document.getElementById('cad-aut1').value,
-                autorizado2: document.getElementById('cad-aut2').value,
-                autorizado3: document.getElementById('cad-aut3').value,
-                autorizado4: document.getElementById('cad-aut4').value,
-                dataCadastro: new Date()
-            });
-
-            status.style.color = "#34a853";
-            status.innerText = "✅ Aluno cadastrado com sucesso!";
-            document.querySelectorAll('#aba-cadastro input').forEach(i => i.value = ""); // Limpa formulário
-        } catch (error) {
-            console.error(error);
-            status.style.color = "#ea4335";
-            status.innerText = "❌ Erro ao cadastrar. Verifique o console.";
-        } finally {
-            btnSalvar.disabled = false;
-            btnSalvar.innerText = "💾 SALVAR NO SISTEMA";
-        }
-    };
-
-    // --- FUNÇÃO DE BUSCA (EXIBIR FOTO + DADOS) ---
+    // Busca Aluno
     document.getElementById('busca').addEventListener('input', async (e) => {
         const termo = e.target.value.toLowerCase();
-        const lista = document.getElementById('listaResultados');
-        if (termo.length < 3) { lista.innerHTML = ""; return; } // Busca começa com 3 letras
+        const divRes = document.getElementById('resultado');
+        if (termo.length < 3) { divRes.innerHTML = ""; return; }
 
         const q = query(collection(db, "alunos"));
-        const querySnapshot = await getDocs(q);
-        lista.innerHTML = "";
-        
-        querySnapshot.forEach((doc) => {
+        const snap = await getDocs(q);
+        divRes.innerHTML = "";
+
+        snap.forEach(doc => {
             const d = doc.data();
             if (d.aluno.toLowerCase().includes(termo)) {
-                // Foto padrão caso não exista
-                const imgTag = d.fotoUrl 
-                    ? `<img src="${d.fotoUrl}" class="aluno-foto" alt="Foto de ${d.aluno}">`
-                    : `<div class="aluno-foto" style="background:#ccc; display:flex; align-items:center; justify-content:center; color:#fff;">Sem Foto</div>`;
-
-                lista.innerHTML += `
-                    <div class="aluno-card">
-                        ${imgTag}
-                        <div class="aluno-info">
-                            <span class="aluno-nome">${d.aluno}</span>
-                            <div class="aluno-pais">👩‍👦 Mãe: ${d.mae || '---'} | 👨‍👦 Pai: ${d.pai || '---'}</div>
-                            <div class="autorizados-box">
-                                <span class="aut-label">Pessoas Autorizadas:</span>
-                                <span class="aut-item">1. ${d.autorizado1 || '---'}</span>
-                                <span class="aut-item">2. ${d.autorizado2 || '---'}</span>
-                                <span class="aut-item">3. ${d.autorizado3 || '---'}</span>
-                                <span class="aut-item">4. ${d.autorizado4 || '---'}</span>
-                            </div>
+                divRes.innerHTML += `
+                    <div class="card-liberacao">
+                        <span class="nome-aluno">${d.aluno}</span>
+                        <p><strong>Mãe:</strong> ${d.mae} | <strong>Pai:</strong> ${d.pai}</p>
+                        <div class="autorizados-lista">
+                            <strong>Pessoas Autorizadas:</strong>
+                            <div class="autorizado-item">1. ${d.autorizado1 || '-'}</div>
+                            <div class="autorizado-item">2. ${d.autorizado2 || '-'}</div>
+                            <div class="autorizado-item">3. ${d.autorizado3 || '-'}</div>
+                            <div class="autorizado-item">4. ${d.autorizado4 || '-'}</div>
                         </div>
                     </div>
                 `;
@@ -204,16 +116,22 @@
         });
     });
 
-    // --- LÓGICA DAS ABAS (INTERFACE) ---
-    window.mudarAba = function(abaNome) {
-        // Esconde tudo
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    // Importar CSV
+    window.importarCSV = function() {
+        const file = document.getElementById('csvFile').files[0];
+        if(!file) return alert("Selecione o arquivo!");
 
-        // Mostra a aba clicada
-        document.getElementById(`aba-${abaNome}`).classList.add('active');
-        event.currentTarget.classList.add('active');
-    };
+        Papa.parse(file, {
+            header: true,
+            complete: async (results) => {
+                for (const item of results.data) {
+                    await addDoc(collection(db, "alunos"), item);
+                }
+                alert("Lista importada!");
+                location.reload();
+            }
+        });
+    }
 </script>
 
 </body>
