@@ -8,64 +8,93 @@
     <style>
         :root {
             --primary: #1a73e8;
+            --primary-dark: #1557b0;
             --danger: #d93025;
             --health: #00897b;
             --whatsapp: #25d366;
-            --bg: #f8f9fa;
+            /* Cor de fundo caso a imagem falhe */
+            --bg-fallback: #dfebf7; 
+            /* Opacidade do fundo branco atrás do texto para garantir leitura */
+            --bg-overlay: rgba(248, 249, 250, 0.93);
             --white: #ffffff;
         }
 
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { width: 100%; max-width: 1300px; margin: auto; }
-        
-        /* Cabeçalho do Sistema com o Novo Nome e Ícone */
-        .header-sistema {
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            min-height: 100vh;
+            
+            /* --- CONFIGURAÇÃO DA SUA IMAGEM DE FUNDO --- */
+            background-color: var(--bg-fallback);
+            
+            /* 1. SUBSTITUA ABAIXO PELO NOME DO SEU ARQUIVO (ex: fundo.jpg) 
+               OU PELA URL DA IMAGEM (ex: https://site.com/imagem.jpg) */
+            background-image: url("fundo.jpg");
+            
+            /* 2. Configurações para a imagem cobrir a tela toda sem repetir */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Mantém o fundo fixo ao rolar a página */
+            
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .header-sistema h1 {
-            font-size: 32px;
-            color: var(--primary);
-            margin: 0;
-            font-weight: 800;
-        }
-        
-        /* Estilização do Ícone SVG (Casa + Cadeado) */
-        .icon-casa-cadeado {
-            width: 45px;
-            height: 45px;
-            fill: var(--primary); /* Cor do ícone acompanha a cor primária */
+            align-items: flex-start;
         }
 
-        .search-box { background: var(--white); padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 25px; text-align: center; }
-        input[type="text"], input[type="password"] { width: 100%; max-width: 550px; padding: 18px; border: 2px solid #e0e0e0; border-radius: 15px; font-size: 20px; outline: none; transition: 0.3s; }
+        /* O restante do código permanece igual para garantir o funcionamento */
+        .container { 
+            width: 100%; 
+            max-width: 1300px; 
+            margin: 20px; 
+            background: var(--bg-overlay);
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(5px); /* Efeito de vidro embaçado */
+        }
+        
+        #tela-login-inicial {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, #a2c4f5 100%);
+            display: flex; justify-content: center; align-items: center; z-index: 10000;
+        }
+        
+        .login-box {
+            background: var(--white); padding: 50px; border-radius: 24px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); width: 100%; max-width: 450px;
+        }
+
+        .header-sistema { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .header-sistema h1 { font-size: 32px; color: var(--primary); margin: 0; font-weight: 800; }
+        .icon-casa-cadeado { width: 45px; height: 45px; fill: var(--primary); }
+
+        .search-box { background: var(--white); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; text-align: center; }
+        
+        input[type="text"], input[type="password"] { 
+            width: 100%; padding: 18px; border: 2px solid #e0e0e0; border-radius: 15px; font-size: 20px; outline: none; transition: 0.3s; box-sizing: border-box;
+        }
         input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(26,115,232,0.1); }
 
         .resultado-wrapper { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; animation: fadeIn 0.5s ease; }
 
-        /* Cards */
         .card { background: var(--white); border-radius: 20px; padding: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); flex: 1; min-width: 350px; max-width: 600px; box-sizing: border-box; position: relative; }
         .card-aluno { border-top: 10px solid var(--primary); }
         .card-saude { border-top: 10px solid var(--health); }
 
-        /* Labels e Textos */
         .aluno-nome { font-size: 28px; font-weight: 800; color: var(--danger); display: block; text-transform: uppercase; margin: 5px 0; }
         .aluno-turma { font-size: 18px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 15px; }
         .saude-title { font-size: 20px; font-weight: 700; color: var(--health); border-bottom: 2px solid #e0f2f1; padding-bottom: 8px; margin-bottom: 15px; }
+        
         .label { font-size: 11px; text-transform: uppercase; color: #70757a; font-weight: 800; display: block; margin-top: 12px; }
         .data { font-size: 16px; color: #202124; font-weight: 600; display: block; }
 
-        /* Grid de Autorizados */
         .grid-auth { display: grid; gap: 8px; margin-top: 10px; background: #f1f8ff; padding: 15px; border-radius: 12px; }
         .auth-row { border-bottom: 1px solid #d0e3ff; padding: 8px 0; display: flex; flex-direction: column; }
         .auth-row:last-child { border: none; }
         .auth-info { display: flex; justify-content: space-between; align-items: center; width: 100%; }
 
-        /* Botões de Contato */
         .acoes-contato { display: flex; gap: 8px; margin-top: 5px; }
         .btn-link { text-decoration: none; font-size: 11px; font-weight: bold; padding: 5px 10px; border-radius: 8px; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
         .btn-tel { background: #e8f0fe; color: var(--primary); }
@@ -75,34 +104,51 @@
         .live-tag { position: absolute; top: 10px; right: 20px; color: var(--whatsapp); font-size: 10px; font-weight: bold; }
 
         .btn { padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .hidden { display: none; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        
+        .hidden { display: none !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 850px) {
             .header-sistema h1 { font-size: 26px; }
-            .icon-casa-cadeado { width: 35px; height: 35px; }
             .card { flex: 1 1 100%; }
+            .login-box { padding: 30px; margin: 20px; }
         }
     </style>
 </head>
 <body>
+
+<div id="tela-login-inicial">
+    <div class="login-box">
+        <svg class="icon-casa-cadeado" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:80px; height:80px; margin-bottom:20px;">
+            <path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3zm1 11.93c.6.25 1 .84 1 1.57 0 1.1-.9 2-2 2s-2-.9-2-2c0-.73.4-1.32 1-1.57V13c0-.55.45-1 1-1s1 .45 1 1v1.93zM12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+            <path d="M11 14h2v3h-2z" fill="#fff"/>
+        </svg>
+        <h1 style="color:var(--primary); margin:0 0 10px 0;">Casa Segura</h1>
+        <p style="color:#666; margin-bottom:30px;">Portaria Casa de Criança</p>
+        
+        <input type="password" id="senha-login-geral" placeholder="Digite a senha de acesso" style="margin-bottom:20px;">
+        <button class="btn btn-primary" style="width:100%; font-size:18px;" onclick="realizarLoginGeral()">ENTRAR NO SISTEMA</button>
+        <p style="font-size:12px; color:#999; margin-top:15px;">Enfermagem ou Sala de Espera</p>
+    </div>
+</div>
 
 <div class="container">
     <div class="search-box">
         <div class="header-sistema">
             <svg class="icon-casa-cadeado" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3zm1 11.93c.6.25 1 .84 1 1.57 0 1.1-.9 2-2 2s-2-.9-2-2c0-.73.4-1.32 1-1.57V13c0-.55.45-1 1-1s1 .45 1 1v1.93zM12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
-                <path d="M17 10h1v2h-1zM6 10h1v2H6z" opacity=".5"/>
-                <path d="M11 14h2v3h-2z"/>
-                <path d="M12 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" fill="#fff"/>
+                <path d="M11 14h2v3h-2z" fill="#fff"/>
             </svg>
             <h1>Casa Segura</h1>
         </div>
         
-        <p style="color: #70757a; margin-top: -10px; margin-bottom: 20px; font-size: 14px;">Portaria Casa de Criança</p>
+        <p style="color: #70757a; margin-top: -10px; margin-bottom: 20px; font-size: 14px;">Portaria Casa de Criança - Acesso: <span id="tipo-acesso-label" style="font-weight:bold; color:var(--primary);"></span></p>
         
-        <input type="text" id="busca" placeholder="🔍 Digite o nome do aluno para consultar...">
-        <div style="margin-top: 15px;">
+        <input type="text" id="busca" placeholder="🔍 Digite o nome completo do aluno para consultar...">
+        
+        <div style="margin-top: 15px;" id="wrapper-btn-admin" class="hidden">
             <button class="btn" style="background:#f1f3f4; color:#666; font-size: 12px;" onclick="toggleAdmin()">⚙️ Área Administrativa</button>
         </div>
     </div>
@@ -111,14 +157,10 @@
 
     <div id="painel-adm" class="hidden" style="text-align:center;">
         <div class="card" style="margin:auto; border: 2px dashed var(--primary); max-width: 500px;">
-            <h3>Painel de Controle</h3>
-            <div id="admin-auth">
-                <input type="password" id="senha-adm" placeholder="Senha do Administrador">
-                <button class="btn" style="background:#333; color:white; width:100%; margin-top:10px;" onclick="loginAdm()">Acessar Painel</button>
-            </div>
-            <div id="import-controls" class="hidden">
+            <h3>Painel de Controle (Enfermagem)</h3>
+            <div id="import-controls">
                 <input type="file" id="csvFile" accept=".csv" style="margin: 20px 0;">
-                <button class="btn" style="background:var(--primary); color:white; width:100%;" onclick="importarCSV()">IMPORTAR CSV (UTF-8)</button>
+                <button class="btn btn-primary" style="width:100%;" onclick="importarCSV()">IMPORTAR CSV (UTF-8)</button>
                 <button class="btn" style="background:var(--danger); color:white; width:100%; margin-top:20px;" onclick="limparBaseDados()">🔥 LIMPAR TODA A BASE</button>
             </div>
         </div>
@@ -143,14 +185,34 @@
 
     const formatarLinkTel = (num) => num ? num.toString().replace(/\D/g, '') : '';
     let unsubscribe = null;
+    let tipoAcessoAtivo = null;
 
-    window.toggleAdmin = () => document.getElementById('painel-adm').classList.toggle('hidden');
-    window.loginAdm = () => {
-        if(document.getElementById('senha-adm').value === "admin123") {
-            document.getElementById('import-controls').classList.remove('hidden');
-            document.getElementById('admin-auth').classList.add('hidden');
-        } else { alert("Senha incorreta!"); }
-    };
+    window.realizarLoginGeral = () => {
+        const senha = document.getElementById('senha-login-geral').value;
+        const telaLogin = document.getElementById('tela-login-inicial');
+        const labelAcesso = document.getElementById('tipo-acesso-label');
+        const btnAdmin = document.getElementById('wrapper-btn-admin');
+
+        if (senha === "1234") {
+            tipoAcessoAtivo = 'enfermagem';
+            labelAcesso.innerText = "Enfermagem";
+            btnAdmin.classList.remove('hidden');
+            telaLogin.style.display = 'none';
+        } else if (senha === "2026") {
+            tipoAcessoAtivo = 'sala-espera';
+            labelAcesso.innerText = "Sala de Espera (Restrito)";
+            btnAdmin.classList.add('hidden');
+            telaLogin.style.display = 'none';
+        } else {
+            alert("Senha incorreta! Tente novamente.");
+            document.getElementById('senha-login-geral').value = "";
+        }
+    }
+
+    window.toggleAdmin = () => {
+        if (tipoAcessoAtivo !== 'enfermagem') return;
+        document.getElementById('painel-adm').classList.toggle('hidden');
+    }
 
     document.getElementById('busca').addEventListener('input', (e) => {
         const termo = e.target.value.toLowerCase();
@@ -174,7 +236,7 @@
                         </div>`;
                     };
 
-                    resDiv.innerHTML += `
+                    let htmlResultado = `
                         <div class="card card-aluno">
                             <div class="live-tag">● LIVE</div>
                             <span class="label">Aluno(a)</span>
@@ -192,30 +254,37 @@
                                 <div class="auth-row"><b>4. ${d.autorizado4 || '-'}</b> ${btnContato(d.RETIRAR4_CONTATO)}</div>
                                 <div class="auth-row"><b>5. ${d.autorizado5 || '-'}</b> ${btnContato(d.RETIRAR5_CONTATO)}</div>
                             </div>
-                        </div>
-                        <div class="card card-saude">
-                            <div class="saude-title">⚕️ Saúde e Emergência</div>
-                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                                <div><span class="label">Contato 1 (${d.CONTATO1_PARENTESCO || ''})</span><span class="data">${d.CONTATO1_NOME || '-'}</span>${btnContato(d.CONTATO1)}</div>
-                                <div><span class="label">Contato 2 (${d.CONTATO2_PARENTESCO || ''})</span><span class="data">${d.CONTATO2_NOME || '-'}</span>${btnContato(d.CONTATO2)}</div>
-                            </div>
-                            <div style="margin-top:10px; border-top: 1px solid #eee; padding-top: 5px;">
-                                <span class="label">Hospital e Plano</span>
-                                <span class="data">${d.HOSPITAL_NOME || '-'}</span>
-                                <span class="data" style="font-size:14px;">${d.PLANO_DE_SAUDE || '-'} (${d.NUM_PLANO || '-'})</span>
-                            </div>
-                            <div class="alerta-box">
-                                <span class="label" style="color:#a66300; margin:0;">Alergias / Febre</span>
-                                <span class="data" style="font-size:14px;"><b>Alergias:</b> ${d.ALERGIAS || 'Nenhuma'}</span>
-                                <span class="data" style="color:var(--danger); font-size:14px;"><b>Febre:</b> ${d.FEBRE || '-'}</span>
-                            </div>
                         </div>`;
+
+                    if (tipoAcessoAtivo === 'enfermagem') {
+                        htmlResultado += `
+                            <div class="card card-saude">
+                                <div class="saude-title">⚕️ Saúde e Emergência</div>
+                                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                                    <div><span class="label">Contato 1 (${d.CONTATO1_PARENTESCO || ''})</span><span class="data">${d.CONTATO1_NOME || '-'}</span>${btnContato(d.CONTATO1)}</div>
+                                    <div><span class="label">Contato 2 (${d.CONTATO2_PARENTESCO || ''})</span><span class="data">${d.CONTATO2_NOME || '-'}</span>${btnContato(d.CONTATO2)}</div>
+                                </div>
+                                <div style="margin-top:10px; border-top: 1px solid #eee; padding-top: 5px;">
+                                    <span class="label">Hospital e Plano</span>
+                                    <span class="data">${d.HOSPITAL_NOME || '-'}</span>
+                                    <span class="data" style="font-size:14px;">${d.PLANO_DE_SAUDE || '-'} (${d.NUM_PLANO || '-'})</span>
+                                </div>
+                                <div class="alerta-box">
+                                    <span class="label" style="color:#a66300; margin:0;">Alergias / Febre</span>
+                                    <span class="data" style="font-size:14px;"><b>Alergias:</b> ${d.ALERGIAS || 'Nenhuma'}</span>
+                                    <span class="data" style="color:var(--danger); font-size:14px;"><b>Febre:</b> ${d.FEBRE || '-'}</span>
+                                </div>
+                            </div>`;
+                    }
+
+                    resDiv.innerHTML += htmlResultado;
                 }
             });
         });
     });
 
     window.importarCSV = function() {
+        if (tipoAcessoAtivo !== 'enfermagem') return alert("Acesso negado.");
         const file = document.getElementById('csvFile').files[0];
         Papa.parse(file, { header: true, encoding: "UTF-8", complete: async (res) => {
             for (const item of res.data) { if(item.aluno) await addDoc(collection(db, "alunos"), item); }
@@ -224,6 +293,7 @@
     };
 
     window.limparBaseDados = async function() {
+        if (tipoAcessoAtivo !== 'enfermagem') return alert("Acesso negado.");
         if (confirm("Apagar toda a base de dados?")) {
             const snap = await getDocs(collection(db, "alunos"));
             for (const d of snap.docs) await deleteDoc(doc(db, "alunos", d.id));
