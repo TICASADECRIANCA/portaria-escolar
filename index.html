@@ -3,70 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portaria Pro | Visualização Lado a Lado</title>
+    <title>Portaria Pro | Sistema Escolar</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         :root {
             --primary: #1a73e8;
             --danger: #d93025;
             --health: #00897b;
-            --bg: #f1f3f4;
+            --bg: #f8f9fa;
             --white: #ffffff;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { width: 100%; max-width: 1200px; margin: auto; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { width: 100%; max-width: 1300px; margin: auto; }
         
-        /* Busca e Admin */
-        .search-box { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 25px; text-align: center; }
-        input[type="text"], input[type="password"] { width: 100%; max-width: 500px; padding: 15px; border: 2px solid #dfe1e5; border-radius: 12px; font-size: 18px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--primary); }
+        /* Busca */
+        .search-box { background: var(--white); padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 30px; text-align: center; }
+        input[type="text"], input[type="password"] { width: 100%; max-width: 600px; padding: 18px; border: 2px solid #e0e0e0; border-radius: 15px; font-size: 20px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(26,115,232,0.1); }
 
-        /* Container dos Cards (Lado a Lado) */
+        /* Container Flexbox Responsivo */
         .resultado-wrapper { 
             display: flex; 
             flex-wrap: wrap; 
-            gap: 20px; 
+            gap: 25px; 
             justify-content: center; 
-            animation: fadeIn 0.4s ease;
-            margin-bottom: 40px;
+            animation: fadeIn 0.5s ease;
         }
 
-        /* Estilo Base dos Cards */
+        /* Estilo dos Cards */
         .card { 
             background: var(--white); 
-            border-radius: 18px; 
-            padding: 25px; 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.06); 
+            border-radius: 20px; 
+            padding: 30px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05); 
             flex: 1; 
-            min-width: 320px; /* Garante que não fiquem magros demais */
-            max-width: 580px;
+            min-width: 350px; 
+            max-width: 600px;
             box-sizing: border-box;
         }
         
-        /* Card Ficha Aluno */
-        .card-aluno { border-top: 12px solid var(--primary); }
-        .aluno-nome { font-size: 30px; font-weight: 900; color: var(--danger); display: block; text-transform: uppercase; line-height: 1.1; margin-bottom: 5px; }
-        .aluno-turma { font-size: 22px; color: var(--primary); font-weight: bold; margin-bottom: 20px; display: block; }
+        .card-aluno { border-top: 15px solid var(--primary); }
+        .card-saude { border-top: 15px solid var(--health); }
+
+        /* Tipografia */
+        .aluno-nome { font-size: 48px; font-weight: 900; color: var(--danger); display: block; text-transform: uppercase; line-height: 1; margin: 10px 0; }
+        .aluno-turma { font-size: 24px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 20px; }
+        .saude-title { font-size: 24px; font-weight: 800; color: var(--health); border-bottom: 3px solid #e0f2f1; padding-bottom: 10px; margin-bottom: 20px; }
+
+        /* Labels e Dados */
+        .label { font-size: 12px; text-transform: uppercase; color: #70757a; font-weight: 800; display: block; margin-top: 15px; letter-spacing: 0.5px; }
+        .data { font-size: 18px; color: #202124; font-weight: 600; display: block; }
+        .tel-link { color: var(--primary); text-decoration: none; font-weight: 800; }
         
-        /* Card Ficha Saúde */
-        .card-saude { border-top: 12px solid var(--health); }
-        .saude-title { font-size: 22px; font-weight: bold; color: var(--health); border-bottom: 2px solid #e0f2f1; padding-bottom: 8px; margin-bottom: 15px; }
+        /* Grid de Autorizados */
+        .grid-auth { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; background: #f1f8ff; padding: 15px; border-radius: 15px; }
+        .auth-row { display: flex; justify-content: space-between; border-bottom: 1px solid #d0e3ff; padding: 5px 0; }
+        .auth-row:last-child { border: none; }
 
-        /* Detalhes internos */
-        .label { font-size: 11px; text-transform: uppercase; color: #70757a; font-weight: bold; display: block; margin-top: 12px; }
-        .data { font-size: 17px; color: #202124; font-weight: 500; display: block; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .alerta-box { background: #fff4e5; border: 1px solid #ffe1ba; padding: 15px; border-radius: 12px; margin-top: 15px; }
-
-        .btn { width: 100%; max-width: 300px; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+        .alerta-box { background: #fff4e5; border: 1px solid #ffe1ba; padding: 20px; border-radius: 15px; margin-top: 20px; }
+        
+        .btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .hidden { display: none; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Ajuste para telas pequenas (Celular) */
-        @media (max-width: 768px) {
-            .aluno-nome { font-size: 32px; }
+        @media (max-width: 850px) {
+            .aluno-nome { font-size: 34px; }
             .card { flex: 1 1 100%; }
         }
     </style>
@@ -75,23 +78,24 @@
 
 <div class="container">
     <div class="search-box">
-        <h2 style="margin:0 0 15px 0; color: var(--primary);">🏫 Consulta Escolar Ativa</h2>
-        <input type="text" id="busca" placeholder="Digite o nome do aluno...">
-        <br>
-        <button class="btn" style="background:#f1f3f4; color:#666; font-size: 12px;" onclick="toggleAdmin()">⚙️ Painel ADM</button>
+        <h1 style="margin:0 0 10px 0; color: var(--primary); font-size: 28px;">SISTEMA DE PORTARIA ATIVA</h1>
+        <input type="text" id="busca" placeholder="🔍 Digite o nome do aluno para consultar...">
+        <div style="margin-top: 15px;">
+            <button class="btn" style="background:#eee; color:#666;" onclick="toggleAdmin()">Configurações</button>
+        </div>
     </div>
 
     <div id="resultado" class="resultado-wrapper"></div>
 
-    <div id="painel-adm" class="hidden">
-        <div class="card" style="margin: auto; border: 2px dashed var(--primary); max-width: 500px;">
-            <h3>Importação de Dados</h3>
-            <input type="password" id="senha-adm" placeholder="Senha do Sistema">
+    <div id="painel-adm" class="hidden" style="text-align:center; margin-top:20px;">
+        <div class="card" style="margin:auto; border: 2px dashed var(--primary);">
+            <h3>Importar Base de Dados</h3>
+            <input type="password" id="senha-adm" placeholder="Senha do Administrador">
             <div id="import-controls" class="hidden">
-                <input type="file" id="csvFile" accept=".csv" style="margin-top:15px;">
-                <button class="btn" style="background:var(--primary); color:white; max-width:100%" onclick="importarCSV()">SUBIR PLANILHA</button>
+                <input type="file" id="csvFile" accept=".csv" style="margin: 20px 0;">
+                <button class="btn" style="background:var(--primary); color:white; width:100%;" onclick="importarCSV()">EFETUAR IMPORTAÇÃO</button>
             </div>
-            <button class="btn" id="btn-login-adm" style="max-width:100%" onclick="loginAdm()">Acessar Importador</button>
+            <button class="btn" id="btn-login-adm" style="background:#333; color:white; width:100%; margin-top:10px;" onclick="loginAdm()">Liberar Importador</button>
         </div>
     </div>
 </div>
@@ -114,7 +118,7 @@
 
     window.toggleAdmin = () => document.getElementById('painel-adm').classList.toggle('hidden');
     window.loginAdm = () => {
-        if(document.getElementById('senha-adm').value === "1234") {
+        if(document.getElementById('senha-adm').value === "admin123") {
             document.getElementById('import-controls').classList.remove('hidden');
             document.getElementById('btn-login-adm').classList.add('hidden');
         } else { alert("Senha incorreta"); }
@@ -134,52 +138,53 @@
             if (d.aluno.toLowerCase().includes(termo)) {
                 resDiv.innerHTML += `
                     <div class="card card-aluno">
-                        <span class="label">Nome do Aluno</span>
+                        <span class="label">Aluno(a)</span>
                         <span class="aluno-nome">${d.aluno}</span>
-                        <span class="aluno-turma">🎓 TURMA: ${d.turma || '-'}</span>
+                        <span class="aluno-turma">Turma: ${d.ae || '-'}</span>
                         
-                        <div class="grid-2">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                             <div><span class="label">Mãe</span><span class="data">${d.mae || '-'}</span></div>
                             <div><span class="label">Pai</span><span class="data">${d.pai || '-'}</span></div>
                         </div>
 
                         <span class="label">Pessoas Autorizadas a Retirar</span>
-                        <div class="grid-2" style="background:#f9f9f9; padding:12px; border-radius:10px; margin-top:8px;">
-                            <div class="data">✅ ${d.autorizado1 || '-'}</div>
-                            <div class="data">✅ ${d.autorizado2 || '-'}</div>
-                            <div class="data">✅ ${d.autorizado3 || '-'}</div>
-                            <div class="data">✅ ${d.autorizado4 || '-'}</div>
+                        <div class="grid-auth">
+                            <div class="auth-row"><b>1. ${d.autorizado1 || '-'}</b> <span>(${d.RETIRAR1_PARENTESCO || '-'})</span> <b>${d.RETIRAR1_CONTATO || ''}</b></div>
+                            <div class="auth-row"><b>2. ${d.autorizado2 || '-'}</b> <span>(${d.RETIRAR2_PARENTESCO || '-'})</span> <b>${d.RETIRAR2_CONTATO || ''}</b></div>
+                            <div class="auth-row"><b>3. ${d.autorizado3 || '-'}</b> <b>${d.RETIRAR3_CONTATO || ''}</b></div>
+                            <div class="auth-row"><b>4. ${d.autorizado4 || '-'}</b> <b>${d.RETIRAR4_CONTATO || ''}</b></div>
+                            <div class="auth-row"><b>5. ${d.autorizado5 || '-'}</b> <b>${d.RETIRAR5_CONTATO || ''}</b></div>
                         </div>
                     </div>
 
                     <div class="card card-saude">
-                        <div class="saude-title">⚕️ Ficha de Saúde</div>
+                        <div class="saude-title">⚕️ Emergência e Saúde</div>
                         
-                        <div class="grid-2">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
                             <div>
-                                <span class="label">Contato Emergência 01</span>
-                                <span class="data"><b>${d.Contato01_NOME || '-'}</b></span>
-                                <span class="data">${d.CONTATO01_PARENTESCO || '-'}</span>
-                                <span class="data" style="color:var(--primary); font-weight:bold;">${d.CONTATO01 || '-'}</span>
+                                <span class="label">Contato 01</span>
+                                <span class="data"><b>${d.CONTATO1_NOME || '-'}</b></span>
+                                <span class="data">${d.CONTATO1_PARENTESCO || '-'}</span>
+                                <a href="tel:${d.CONTATO1}" class="tel-link">${d.CONTATO1 || ''}</a>
                             </div>
                             <div>
-                                <span class="label">Contato Emergência 02</span>
-                                <span class="data"><b>${d.Contato02_NOME || '-'}</b></span>
-                                <span class="data">${d.CONTATO02_PARENTESCO || '-'}</span>
-                                <span class="data" style="color:var(--primary); font-weight:bold;">${d.CONTATO02 || '-'}</span>
+                                <span class="label">Contato 02</span>
+                                <span class="data"><b>${d.CONTATO2_NOME || '-'}</b></span>
+                                <span class="data">${d.CONTATO2_PARENTESCO || '-'}</span>
+                                <a href="tel:${d.CONTATO2}" class="tel-link">${d.CONTATO2 || ''}</a>
                             </div>
                         </div>
 
-                        <div class="grid-2" style="margin-top:15px; border-top: 1px solid #eee; padding-top: 10px;">
-                            <div><span class="label">Hospital Permitido</span><span class="data">${d.Hospital_Nome || '-'}</span></div>
-                            <div><span class="label">Plano de Saúde</span><span class="data">${d.PLANO_DE_SAUDE || '-'}</span></div>
-                            <div><span class="label">Nº do Plano</span><span class="data">${d.NUM_PLANO || '-'}</span></div>
+                        <div style="margin-top:20px; border-top: 1px solid #eee; padding-top: 10px;">
+                            <span class="label">Hospital e Plano</span>
+                            <span class="data"><b>Unidade:</b> ${d.HOSPITAL_NOME || '-'}</span>
+                            <span class="data"><b>Convênio:</b> ${d.PLANO_DE_SAUDE || '-'} (${d.NUM_PLANO || '-'})</span>
                         </div>
 
                         <div class="alerta-box">
-                            <span class="label" style="color:#a66300; margin-top:0;">⚠️ Informações Médicas</span>
-                            <div class="data" style="margin-bottom:8px;"><b>Alergias:</b> ${d.Alergias || 'Nenhuma informada'}</div>
-                            <div class="data" style="color:var(--danger)"><b>Se Febre:</b> ${d.Febre || 'Não medicar'}</div>
+                            <span class="label" style="color:#a66300; margin-top:0;">⚠️ Alerta Médico</span>
+                            <span class="data" style="margin-bottom:10px;"><b>Alergias:</b> ${d.ALERGIAS || 'Nenhuma'}</span>
+                            <span class="data" style="color:var(--danger)"><b>Se Febre:</b> ${d.FEBRE || 'Não medicar sem autorização'}</span>
                         </div>
                     </div>
                 `;
@@ -193,8 +198,14 @@
         Papa.parse(file, {
             header: true,
             complete: async (res) => {
-                for (const item of res.data) { await addDoc(collection(db, "alunos"), item); }
-                alert("Dados importados!");
+                let count = 0;
+                for (const item of res.data) {
+                    if(item.aluno) {
+                        await addDoc(collection(db, "alunos"), item);
+                        count++;
+                    }
+                }
+                alert(count + " registros importados!");
                 location.reload();
             }
         });
