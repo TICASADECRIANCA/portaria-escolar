@@ -3,58 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portaria Escolar - Segurança</title>
+    <title>Portaria Pro | Controle de Acesso</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        :root { --primary: #1a73e8; --danger: #d93025; --success: #188038; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f1f3f4; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 600px; background: white; padding: 25px; border-radius: 12px; shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        
-        /* Tela de Login Simples */
-        #tela-login { text-align: center; padding: 50px 20px; }
-        
-        /* Interface de Busca */
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        input[type="text"], input[type="password"] { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #dadce0; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        
-        /* Card do Aluno */
-        .card-liberacao { background: #fff; border: 2px solid var(--primary); border-radius: 15px; padding: 20px; margin-top: 20px; animation: fadeIn 0.3s; }
-        .nome-aluno { font-size: 26px; color: var(--danger); font-weight: bold; text-transform: uppercase; display: block; }
-        .autorizados-lista { margin-top: 15px; background: #e8f0fe; padding: 15px; border-radius: 10px; }
-        .autorizado-item { font-size: 18px; color: #202124; font-weight: 600; padding: 8px 0; border-bottom: 1px solid #d0d7de; }
-        .autorizado-item:last-child { border: none; }
+        /* Variáveis de Cor */
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --bg-body: #f8f9fa;
+            --text-main: #202124;
+            --text-secondary: #5f6368;
+            --danger: #d93025;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
 
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn-blue { background: var(--primary); color: white; }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 550px;
+            padding: 20px;
+        }
+
+        /* Card de Login e Main */
+        .glass-card {
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        h2 { font-size: 24px; margin-bottom: 8px; color: var(--primary); }
+        p.subtitle { color: var(--text-secondary); margin-bottom: 30px; font-size: 14px; }
+
+        /* Inputs Estilizados */
+        .input-group { position: relative; margin-bottom: 20px; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            outline: none;
+            background: #fdfdfd;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
+        }
+
+        /* Botões */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+        /* Resultado da Busca */
+        .card-aluno {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+            border-left: 8px solid var(--primary);
+            text-align: left;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .aluno-header { font-size: 22px; font-weight: 800; color: var(--danger); margin-bottom: 10px; display: block; }
+        .pais-info { font-size: 15px; color: var(--text-secondary); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; }
+
+        .autorizados-section {
+            background: #f1f8ff;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .auth-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .auth-name {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 6px 0;
+            color: #3c4043;
+        }
+
+        .auth-name::before { content: "✅"; margin-right: 10px; font-size: 14px; }
+
+        /* Rodapé de Admin */
+        .admin-footer {
+            margin-top: 40px;
+            padding: 20px;
+            border-radius: 16px;
+            background: #eee;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="area-login">
-        <h2>Acesso à Portaria</h2>
-        <input type="password" id="senha-acesso" placeholder="Digite a senha da escola">
-        <button class="btn btn-blue" onclick="verificarSenha()">ENTRAR</button>
+    <div id="area-login" class="glass-card">
+        <h2>🔒 Portaria Pro</h2>
+        <p class="subtitle">Identifique-se para acessar o sistema</p>
+        <input type="password" id="senha-acesso" placeholder="Senha de acesso">
+        <button class="btn btn-primary" onclick="verificarSenha()">ENTRAR</button>
     </div>
 
     <div id="area-sistema" class="hidden">
-        <div class="header">
-            <h3>SISTEMA DE SAÍDA</h3>
-            <button onclick="location.reload()" style="float: right; font-size: 10px;">Sair</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin:0;">Escola Ativa</h2>
+            <button onclick="location.reload()" style="background:none; border:none; color:var(--danger); cursor:pointer;">Sair</button>
         </div>
-        
-        <input type="text" id="busca" placeholder="🔎 Nome do Aluno...">
-        
+
+        <input type="text" id="busca" placeholder="🔎 Comece a digitar o nome do aluno...">
+
         <div id="resultado"></div>
 
-        <hr style="margin-top: 50px; opacity: 0.3;">
-        <div style="font-size: 12px; color: #666; text-align: center;">
-            <p>Para importar nova lista, use a função abaixo:</p>
-            <input type="file" id="csvFile" accept=".csv">
-            <button onclick="importarCSV()" style="font-size: 10px;">Importar CSV</button>
+        <div class="admin-footer">
+            <strong>Área Administrativa</strong><br>
+            Importar nova base de dados (CSV):<br><br>
+            <input type="file" id="csvFile" accept=".csv" style="font-size: 10px; margin-bottom: 10px;">
+            <button class="btn btn-primary" style="padding: 8px; font-size: 12px;" onclick="importarCSV()">Importar Dados</button>
         </div>
     </div>
 </div>
@@ -75,40 +191,39 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Senha simples para evitar curiosos
+    // Login
     window.verificarSenha = function() {
-        const senha = document.getElementById('senha-acesso').value;
-        if(senha === "1234") { // ALTERE SUA SENHA AQUI
+        if(document.getElementById('senha-acesso').value === "1234") {
             document.getElementById('area-login').classList.add('hidden');
             document.getElementById('area-sistema').classList.remove('hidden');
-        } else {
-            alert("Senha incorreta!");
-        }
+        } else { alert("Acesso negado."); }
     }
 
-    // Busca Aluno
+    // Busca
     document.getElementById('busca').addEventListener('input', async (e) => {
         const termo = e.target.value.toLowerCase();
-        const divRes = document.getElementById('resultado');
-        if (termo.length < 3) { divRes.innerHTML = ""; return; }
+        const resDiv = document.getElementById('resultado');
+        if (termo.length < 3) { resDiv.innerHTML = ""; return; }
 
         const q = query(collection(db, "alunos"));
         const snap = await getDocs(q);
-        divRes.innerHTML = "";
+        resDiv.innerHTML = "";
 
         snap.forEach(doc => {
             const d = doc.data();
             if (d.aluno.toLowerCase().includes(termo)) {
-                divRes.innerHTML += `
-                    <div class="card-liberacao">
-                        <span class="nome-aluno">${d.aluno}</span>
-                        <p><strong>Mãe:</strong> ${d.mae} | <strong>Pai:</strong> ${d.pai}</p>
-                        <div class="autorizados-lista">
-                            <strong>Pessoas Autorizadas:</strong>
-                            <div class="autorizado-item">1. ${d.autorizado1 || '-'}</div>
-                            <div class="autorizado-item">2. ${d.autorizado2 || '-'}</div>
-                            <div class="autorizado-item">3. ${d.autorizado3 || '-'}</div>
-                            <div class="autorizado-item">4. ${d.autorizado4 || '-'}</div>
+                resDiv.innerHTML += `
+                    <div class="card-aluno">
+                        <span class="aluno-header">${d.aluno}</span>
+                        <div class="pais-info">
+                            👩‍👧‍👦 <b>Mãe:</b> ${d.mae || '-'} | 👨‍👦 <b>Pai:</b> ${d.pai || '-'}
+                        </div>
+                        <div class="autorizados-section">
+                            <span class="auth-title">Pessoas Autorizadas</span>
+                            <div class="auth-name">${d.autorizado1 || 'Não cadastrado'}</div>
+                            ${d.autorizado2 ? `<div class="auth-name">${d.autorizado2}</div>` : ''}
+                            ${d.autorizado3 ? `<div class="auth-name">${d.autorizado3}</div>` : ''}
+                            ${d.autorizado4 ? `<div class="auth-name">${d.autorizado4}</div>` : ''}
                         </div>
                     </div>
                 `;
@@ -116,23 +231,19 @@
         });
     });
 
-    // Importar CSV
+    // Importar
     window.importarCSV = function() {
         const file = document.getElementById('csvFile').files[0];
-        if(!file) return alert("Selecione o arquivo!");
-
+        if(!file) return alert("Selecione o arquivo CSV");
         Papa.parse(file, {
             header: true,
-            complete: async (results) => {
-                for (const item of results.data) {
-                    await addDoc(collection(db, "alunos"), item);
-                }
-                alert("Lista importada!");
+            complete: async (res) => {
+                for (const item of res.data) { await addDoc(collection(db, "alunos"), item); }
+                alert("Importação finalizada!");
                 location.reload();
             }
         });
     }
 </script>
-
 </body>
 </html>
