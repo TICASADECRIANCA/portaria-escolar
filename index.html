@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portaria Escolar - Consulta</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f7; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { color: #1a73e8; text-align: center; margin-bottom: 20px; }
+        
+        /* Estilo Busca */
+        input[type="text"] { width: 100%; padding: 15px; border: 2px solid #dfe1e5; border-radius: 10px; font-size: 18px; outline: none; transition: 0.3s; box-sizing: border-box; }
+        input[type="text"]:focus { border-color: #1a73e8; box-shadow: 0 0 8px rgba(26,115,232,0.2); }
+
+        /* Estilo Cards */
+        .card { background: #fff; border: 1px solid #e0e0e0; border-left: 10px solid #1a73e8; padding: 20px; margin-top: 15px; border-radius: 12px; }
+        .nome-aluno { font-size: 22px; color: #d93025; font-weight: bold; display: block; }
+        .pais { font-size: 14px; color: #5f6368; margin: 10px 0; padding-bottom: 10px; border-bottom: 1px solid #f1f3f4; }
+        .autorizados-box { background: #f8f9fa; padding: 12px; border-radius: 8px; }
+        .aut-item { display: block; font-size: 15px; color: #202124; font-weight: 500; margin-bottom: 3px; }
+        .label-aut { font-size: 12px; color: #1a73e8; font-weight: bold; text-transform: uppercase; }
+
+        /* Estilo Importador */
+        .admin-section { margin-top: 40px; padding: 20px; border: 2px dashed #dadce0; border-radius: 15px; background: #fafafa; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .btn-import { background: #34a853; color: white; }
+        .btn-import:hover { background: #2d8e47; }
+        .btn-delete { background: #ea4335; color: white; font-size: 12px; margin-top: 20px; opacity: 0.8; }
+        .btn-delete:hover { opacity: 1; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Sistema de Portaria</h2>
+    
+    <input type="text" id="busca" placeholder="🔎 Digite o nome do aluno...">
+    
+    <div id="listaResultados"></div>
+
+    <div class="admin-section">
+        <h4>Painel de Administração</h4>
+        <p style="font-size: 11px; color: #666;">CSV: aluno, mae, pai, autorizado1, autorizado2, autorizado3, autorizado4</p>
+        <input type="file" id="uploadCsv" accept=".csv">
+        <button class="btn btn-import" onclick="importarDados()">IMPORTAR LISTA CSV</button>
+        <button class="btn btn-delete" onclick="limparBanco()">⚠️ LIMPAR TODOS OS DADOS</button>
+    </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, query, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+  // Suas credenciais vinculadas
+  const firebaseConfig = {
+    apiKey: "AIzaSyC67PDC576cb9FSbwExmG5RTRIaevM0vPE",
+    authDomain: "portaria-escolar-f9226.firebaseapp.com",
+    projectId: "portaria-escolar-f9226",
+    storageBucket: "portaria-escolar-f9226.firebasestorage.app",
+    messagingSenderId: "1024003667592",
+    appId: "1:1024003667592:web:4faf498c3f39999f75113d"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // --- BUSCA REAL-TIME ---
+  document.getElementById('busca').addEventListener('input', async (e) => {
+    const termo = e.target.value.toLowerCase();
+    const lista = document.getElementById('listaResultados');
+    if (termo.length < 2) { lista.innerHTML = ""; return; }
+
+    const q = query(collection(db, "alunos"));
+    const querySnapshot = await getDocs(q);
+    lista.innerHTML = "";
+    
+    querySnapshot.forEach((doc) => {
+      const d = doc.data();
+      if (d.aluno.toLowerCase().includes(termo)) {
+        lista.innerHTML += `
+          <div class="card">
+            <span class="nome-aluno">${d.aluno}</span>
+            <div class="pais">👩‍👦 ${d.mae || '---'} | 👨‍👦 ${d.pai || '---'}</div>
+            <div class="autorizados-box">
+                <span class="label-aut">Autorizados a retirar:</span>
+                <span class="aut-item">1. ${d.autorizado1 || '-'}</span>
+                <span class="aut-item">2. ${d.autorizado2 || '-'}</span>
+                <span class="aut-item">3. ${d.autorizado3 || '-'}</span>
+                <span class="aut-item">4. ${d.autorizado4 || '-'}</span>
+            </div>
+          </div>
+        `;
+      }
+    });
+  });
+
+  // --- IMPORTAÇÃO ---
+  window.importarDados = function() {
+    const fileInput = document.getElementById('uploadCsv');
+    if (!fileInput.files[0]) return alert("Selecione um arquivo CSV!");
+
+    Papa.parse(fileInput.files[0], {
+      header: true,
+      skipEmptyLines: true,
+      complete: async function(results) {
+        let total = 0;
+        for (const item of results.data) {
+          try {
+            await addDoc(collection(db, "alunos"), {
+              aluno: item.aluno,
+              mae: item.mae,
+              pai: item.pai,
+              autorizado1: item.autorizado1,
+              autorizado2: item.autorizado2,
+              autorizado3: item.autorizado3,
+              autorizado4: item.autorizado4
+            });
+            total++;
+          } catch (err) { console.error(err); }
+        }
+        alert(total + " alunos importados!");
+        location.reload();
+      }
+    });
+  };
+
+  // --- LIMPAR BANCO ---
+  window.limparBanco = async function() {
+    if (confirm("TEM CERTEZA? Isso apagará todos os alunos cadastrados!")) {
+        const querySnapshot = await getDocs(collection(db, "alunos"));
+        const promessas = querySnapshot.docs.map(d => deleteDoc(doc(db, "alunos", d.id)));
+        await Promise.all(promessas);
+        alert("Banco de dados limpo com sucesso!");
+        location.reload();
+    }
+  };
+</script>
+
+</body>
+</html>
