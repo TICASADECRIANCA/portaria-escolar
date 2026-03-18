@@ -12,7 +12,7 @@
             --danger: #d93025;
             --health: #00897b;
             --whatsapp: #25d366;
-            --bg-overlay: rgba(248, 249, 250, 0.94);
+            --bg-overlay: rgba(248, 249, 250, 0.96);
             --white: #ffffff;
         }
 
@@ -20,47 +20,30 @@
             font-family: 'Segoe UI', system-ui, sans-serif; 
             margin: 0; padding: 0; min-height: 100vh;
             background-color: #dfebf7;
-            /* SUBSTITUA PELO NOME DA SUA IMAGEM */
             background-image: url("NOME_DO_SEU_ARQUIVO.jpg");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;
             display: flex; justify-content: center; align-items: flex-start;
         }
 
         .container { 
             width: 100%; max-width: 1300px; margin: 20px; 
             background: var(--bg-overlay); padding: 25px; border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15); backdrop-filter: blur(8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15); backdrop-filter: blur(10px);
         }
         
-        /* TELAS DE LOGIN */
         #tela-login-inicial {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(26,115,232,0.95) 0%, rgba(162,196,245,0.95) 100%);
+            background: linear-gradient(135deg, rgba(26,115,232,0.98) 0%, rgba(162,196,245,0.98) 100%);
             display: flex; justify-content: center; align-items: center; z-index: 10000;
         }
-        .login-box {
-            background: var(--white); padding: 40px; border-radius: 24px; text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2); width: 90%; max-width: 400px;
-        }
-        .btn-escolha {
-            width: 100%; padding: 18px; margin: 10px 0; border: none; border-radius: 12px;
-            font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s;
-        }
+        .login-box { background: var(--white); padding: 40px; border-radius: 24px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+        .btn-escolha { width: 100%; padding: 18px; margin: 10px 0; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .btn-enfermagem { background: var(--health); color: white; }
         .btn-espera { background: var(--primary); color: white; }
         .btn-voltar-login { background: #f1f3f4; color: #555; margin-top: 15px; }
 
-        /* INTERFACE */
-        .header-sistema { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 15px; }
-        .icon-casa-cadeado { width: 40px; height: 40px; fill: var(--primary); }
         .search-box { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; text-align: center; position: relative; }
-        
-        input[type="text"], input[type="password"] { 
-            width: 100%; padding: 16px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 18px; outline: none; box-sizing: border-box;
-        }
+        input[type="text"], input[type="password"] { width: 100%; padding: 16px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 18px; outline: none; box-sizing: border-box; }
 
         .resultado-wrapper { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
         .card { background: var(--white); border-radius: 20px; padding: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); flex: 1; min-width: 350px; max-width: 600px; position: relative; }
@@ -80,8 +63,7 @@
         .btn-tel { background: #e8f0fe; color: var(--primary); }
         .btn-wpp { background: #e6fcf0; color: var(--whatsapp); }
 
-        .alerta-box { background: #fff4e5; border: 1px solid #ffe1ba; padding: 12px; border-radius: 10px; margin-top: 12px; font-size: 14px; }
-        .btn-sair { position: absolute; top: 10px; right: 10px; background: #fee; color: var(--danger); border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .alerta-box { background: #fff4e5; border: 1px solid #ffe1ba; padding: 12px; border-radius: 10px; margin-top: 12px; font-size: 13px; }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -89,14 +71,12 @@
 
 <div id="tela-login-inicial">
     <div id="box-escolha" class="login-box">
-        <svg class="icon-casa-cadeado" viewBox="0 0 24 24" style="width:60px; margin-bottom:10px;"><path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3z"/></svg>
         <h1 style="color:var(--primary); margin:0 0 25px 0;">Casa Segura</h1>
         <button class="btn-escolha btn-enfermagem" onclick="abrirSenha('enfermagem')">⚕️ ENFERMAGEM</button>
-        <button class="btn-escolha btn-espera" onclick="abrirSenha('espera')">🛋️ SALA DE ESPERA</button>
+        <button class="btn-escolha btn-espera" onclick="abrirSenha('espera')"> Couch SALA DE ESPERA</button>
     </div>
-
     <div id="box-senha" class="login-box hidden">
-        <h2 id="txt-perfil" style="margin-bottom:20px;">Senha</h2>
+        <h2 id="txt-perfil">Senha</h2>
         <input type="password" id="input-senha" placeholder="Digite a senha...">
         <button class="btn-escolha btn-espera" style="margin-top:15px;" onclick="conferirSenha()">ENTRAR</button>
         <button class="btn-escolha btn-voltar-login" onclick="voltarEscolha()">← Voltar</button>
@@ -105,16 +85,12 @@
 
 <div class="container hidden" id="app-principal">
     <div class="search-box">
-        <button class="btn-sair" onclick="location.reload()">🚪 SAIR</button>
-        <div class="header-sistema">
-            <svg class="icon-casa-cadeado" viewBox="0 0 24 24"><path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3z"/></svg>
-            <h1>Casa Segura</h1>
-        </div>
-        <p style="font-size:13px; color:#666;">Acesso: <b id="label-perfil"></b></p>
-        <input type="text" id="busca" placeholder="🔍 Buscar nome do aluno...">
-        
+        <button onclick="location.reload()" style="position:absolute; top:10px; right:10px; cursor:pointer; border:none; background:#eee; padding:5px 10px; border-radius:5px;">🚪 SAIR</button>
+        <h2 style="color:var(--primary); margin:0;">Casa Segura</h2>
+        <p style="font-size:12px; color:#666; margin-bottom:15px;">Acesso: <b id="label-perfil"></b></p>
+        <input type="text" id="busca" placeholder="🔍 Digite o NOME do aluno para buscar...">
         <div id="area-adm" class="hidden" style="margin-top:10px;">
-            <button onclick="document.getElementById('painel-adm').classList.toggle('hidden')" style="font-size:11px; cursor:pointer;">⚙️ Painel Admin</button>
+            <button onclick="document.getElementById('painel-adm').classList.toggle('hidden')" style="font-size:10px; cursor:pointer;">⚙️ Painel Importar CSV</button>
         </div>
     </div>
 
@@ -122,10 +98,10 @@
 
     <div id="painel-adm" class="hidden" style="text-align:center; margin-bottom: 20px;">
         <div class="card" style="margin:auto; border: 2px dashed #ccc; max-width: 450px;">
-            <h4>Importar Base de Dados</h4>
+            <h4>Importar CSV (UTF-8)</h4>
             <input type="file" id="csvFile" accept=".csv" style="margin-bottom:10px;">
-            <button class="btn-escolha btn-espera" onclick="importarCSV()">IMPORTAR CSV</button>
-            <button onclick="limparBase()" style="color:red; margin-top:15px; cursor:pointer; background:none; border:none;">Limpar Toda Base</button>
+            <button class="btn-escolha btn-espera" onclick="importarCSV()">IMPORTAR</button>
+            <button onclick="limparBase()" style="color:red; margin-top:15px; cursor:pointer; background:none; border:none; font-size:11px;">Esvaziar Banco de Dados</button>
         </div>
     </div>
 </div>
@@ -148,17 +124,8 @@
     let unsubscribe = null;
     let acessoAtivo = "";
 
-    // NAVEGAÇÃO LOGIN
-    window.abrirSenha = (p) => {
-        acessoAtivo = p;
-        document.getElementById('box-escolha').classList.add('hidden');
-        document.getElementById('box-senha').classList.remove('hidden');
-        document.getElementById('txt-perfil').innerText = p === 'enfermagem' ? '⚕️ Enfermagem' : '🛋️ Sala de Espera';
-    };
-    window.voltarEscolha = () => {
-        document.getElementById('box-escolha').classList.remove('hidden');
-        document.getElementById('box-senha').classList.add('hidden');
-    };
+    window.abrirSenha = (p) => { acessoAtivo = p; document.getElementById('box-escolha').classList.add('hidden'); document.getElementById('box-senha').classList.remove('hidden'); document.getElementById('txt-perfil').innerText = p === 'enfermagem' ? '⚕️ Enfermagem' : '🛋️ Sala de Espera'; };
+    window.voltarEscolha = () => { document.getElementById('box-escolha').classList.remove('hidden'); document.getElementById('box-senha').classList.add('hidden'); };
     window.conferirSenha = () => {
         const s = document.getElementById('input-senha').value;
         if((acessoAtivo === 'enfermagem' && s === '1234') || (acessoAtivo === 'espera' && s === '2026')) {
@@ -169,7 +136,6 @@
         } else { alert("Senha Errada!"); }
     };
 
-    // BUSCA E RENDERIZAÇÃO COMPLETA
     document.getElementById('busca').addEventListener('input', (e) => {
         const termo = e.target.value.toLowerCase();
         const resDiv = document.getElementById('resultado');
@@ -180,47 +146,50 @@
             resDiv.innerHTML = "";
             snap.forEach(docSnap => {
                 const d = docSnap.data();
-                if (d.aluno && d.aluno.toLowerCase().includes(termo)) {
+                if (d.NOME && d.NOME.toLowerCase().includes(termo)) {
                     const btnC = (n) => {
                         const num = n ? n.toString().replace(/\D/g, '') : '';
                         return num ? `<div class="acoes-contato"><a href="tel:${num}" class="btn-link btn-tel">📞 Ligar</a><a href="https://wa.me/55${num}" target="_blank" class="btn-link btn-wpp">💬 Whats</a></div>` : '';
                     };
 
-                    // CARD ALUNO COM OS 5 AUTORIZADOS RESTAURADOS
                     let html = `
                         <div class="card card-aluno">
                             <span class="label">Aluno(a)</span>
-                            <span class="aluno-nome">${d.aluno}</span>
-                            <span class="aluno-turma">Turma: ${d.ae || '-'}</span>
+                            <span class="aluno-nome">${d.NOME}</span>
+                            <span class="data" style="color:var(--primary)">Turma: ${d.TURMA || '-'}</span>
                             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                                <div><span class="label">Mãe</span><span class="data">${d.mae || '-'}</span></div>
-                                <div><span class="label">Pai</span><span class="data">${d.pai || '-'}</span></div>
+                                <div><span class="label">Mãe: ${d.MAE_NOME || '-'}</span>${btnC(d.MAE_ER_CELULAR)}</div>
+                                <div><span class="label">Pai: ${d.PAI_NOME || '-'}</span>${btnC(d.PAI_ER_CELULAR)}</div>
                             </div>
                             <span class="label">Autorizados a Retirar</span>
                             <div class="grid-auth">
-                                <div class="auth-row"><div class="auth-info"><b>1. ${d.autorizado1 || '-'}</b><span>${d.RETIRAR1_PARENTESCO || ''}</span></div>${btnC(d.RETIRAR1_CONTATO)}</div>
-                                <div class="auth-row"><div class="auth-info"><b>2. ${d.autorizado2 || '-'}</b><span>${d.RETIRAR2_PARENTESCO || ''}</span></div>${btnC(d.RETIRAR2_CONTATO)}</div>
-                                <div class="auth-row"><b>3. ${d.autorizado3 || '-'}</b> ${btnC(d.RETIRAR3_CONTATO)}</div>
-                                <div class="auth-row"><b>4. ${d.autorizado4 || '-'}</b> ${btnC(d.RETIRAR4_CONTATO)}</div>
-                                <div class="auth-row"><b>5. ${d.autorizado5 || '-'}</b> ${btnC(d.RETIRAR5_CONTATO)}</div>
+                                <div class="auth-row"><div class="auth-info"><b>1. ${d.RETIRAR1_NOME || '-'}</b><span>${d.RETIRAR1_PARENTESCO || ''}</span></div>${btnC(d.RETIRAR1_CONTATO)}</div>
+                                <div class="auth-row"><div class="auth-info"><b>2. ${d.RETIRAR2_NOME || '-'}</b><span>${d.RETIRAR2_PARENTESCO || ''}</span></div>${btnC(d.RETIRAR2_CONTATO)}</div>
+                                <div class="auth-row"><div class="auth-info"><b>3. ${d.RETIRAR3_NOME || '-'}</b><span>${d.RETIRAR3_PARENTESCO || ''}</span></div>${btnC(d.RETIRAR3_CONTATO)}</div>
+                                <div class="auth-row"><div class="auth-info"><b>4. ${d.RETIRAR4_NOME || '-'}</b><span>${d.RETIRAR4_PARENTESCO || ''}</span></div>${btnC(d.RETIRAR4_CONTATO)}</div>
+                                <div class="auth-row"><div class="auth-info"><b>5. ${d.RETIRAR5_NOME || '-'}</b><span>${d.RETIRAR5_PARENTESCO || ''}</span></div>${btnC(d.RETIRAR5_CONTATO)}</div>
                             </div>
                         </div>`;
 
-                    // CARD SAÚDE RESTAURADO (Só para Enfermagem)
                     if (acessoAtivo === 'enfermagem') {
                         html += `
                         <div class="card card-saude">
-                            <div class="saude-title">⚕️ Saúde e Emergência</div>
+                            <div class="saude-title" style="color:var(--health); font-weight:bold; border-bottom:1px solid #eee; padding-bottom:5px;">⚕️ Ficha Médica</div>
                             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                                <div><span class="label">Contato 1 (${d.CONTATO1_PARENTESCO || ''})</span><span class="data">${d.CONTATO1_NOME || '-'}</span>${btnC(d.CONTATO1)}</div>
-                                <div><span class="label">Contato 2 (${d.CONTATO2_PARENTESCO || ''})</span><span class="data">${d.CONTATO2_NOME || '-'}</span>${btnC(d.CONTATO2)}</div>
+                                <div><span class="label">Emergência 1 (${d.CONTATO1_PARENTESCO || ''})</span><span class="data">${d.CONTATO1_NOME || '-'}</span>${btnC(d.CONTATO1_NOME)}</div>
+                                <div><span class="label">Emergência 2 (${d.CONTATO2_PARENTESCO || ''})</span><span class="data">${d.CONTATO2_NOME || '-'}</span>${btnC(d.CONTATO2_NOME)}</div>
                             </div>
                             <span class="label">Hospital e Plano</span>
                             <span class="data">${d.HOSPITAL_NOME || '-'}</span>
                             <span class="data" style="font-size:13px;">${d.PLANO_DE_SAUDE || '-'} (${d.NUM_PLANO || '-'})</span>
                             <div class="alerta-box">
-                                <b>Alergias:</b> ${d.ALERGIAS || 'Nenhuma'}<br>
-                                <b style="color:var(--danger)">Febre:</b> ${d.FEBRE || '-'}
+                                <b>Alergias:</b> ${d.ALERGIAS || 'Não'}<br>
+                                <b>Detalhes Alergias:</b> ${d.OUTRAS_ALERGIAS_DETALHE || '-'}<br>
+                                <b>Restrição Alimentar:</b> ${d.RESTRICAO_ALIMENTAR || 'Não'}<br>
+                                <b style="color:var(--danger)">Febre:</b> ${d.FEBRE || '-'}<br>
+                                <b>Dor de Cabeça:</b> ${d.DOR_CABECA || '-'}<br>
+                                <b>Medicamentos:</b> ${d.INGERE_MEDIC || 'Não'} (${d.INGERE_DESCRICAO || ''})<br>
+                                <b>Tratamento:</b> ${d.TRATAMENTO || '-'}
                             </div>
                         </div>`;
                     }
@@ -230,21 +199,14 @@
         });
     });
 
-    // ADMIN
     window.importarCSV = () => {
         const file = document.getElementById('csvFile').files[0];
-        Papa.parse(file, { header: true, complete: async (r) => {
-            for(const i of r.data) { if(i.aluno) await addDoc(collection(db, "alunos"), i); }
-            alert("Sucesso!");
+        Papa.parse(file, { header: true, skipEmptyLines: true, complete: async (r) => {
+            for(const i of r.data) { if(i.NOME) await addDoc(collection(db, "alunos"), i); }
+            alert("Dados importados com sucesso!");
         }});
     };
-    window.limparBase = async () => {
-        if(confirm("Apagar tudo?")) {
-            const s = await getDocs(collection(db, "alunos"));
-            for(const d of s.docs) await deleteDoc(doc(db, "alunos", d.id));
-            alert("Limpo!");
-        }
-    };
+    window.limparBase = async () => { if(confirm("Apagar todos os alunos?")) { const s = await getDocs(collection(db, "alunos")); for(const d of s.docs) await deleteDoc(doc(db, "alunos", d.id)); alert("Base limpa!"); } };
 </script>
 </body>
 </html>
