@@ -20,6 +20,7 @@
             font-family: 'Segoe UI', system-ui, sans-serif; 
             margin: 0; padding: 0; min-height: 100vh;
             background-color: #dfebf7;
+            /* Lembre-se de colocar sua imagem na mesma pasta ou usar um link */
             background-image: url("NOME_DO_SEU_ARQUIVO.jpg");
             background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;
             display: flex; justify-content: center; align-items: flex-start;
@@ -37,7 +38,7 @@
             display: flex; justify-content: center; align-items: center; z-index: 10000;
         }
         .login-box { background: var(--white); padding: 40px; border-radius: 24px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
-        .btn-escolha { width: 100%; padding: 18px; margin: 10px 0; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .btn-escolha { width: 100%; padding: 18px; margin: 10px 0; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-enfermagem { background: var(--health); color: white; }
         .btn-espera { background: var(--primary); color: white; }
         .btn-voltar-login { background: #f1f3f4; color: #555; margin-top: 15px; }
@@ -73,7 +74,7 @@
     <div id="box-escolha" class="login-box">
         <h1 style="color:var(--primary); margin:0 0 25px 0;">Casa Segura</h1>
         <button class="btn-escolha btn-enfermagem" onclick="abrirSenha('enfermagem')">⚕️ ENFERMAGEM</button>
-        <button class="btn-escolha btn-espera" onclick="abrirSenha('espera')">  SALA DE ESPERA</button>
+        <button class="btn-escolha btn-espera" onclick="abrirSenha('espera')">🛋️ SALA DE ESPERA</button>
     </div>
     <div id="box-senha" class="login-box hidden">
         <h2 id="txt-perfil">Senha</h2>
@@ -85,12 +86,12 @@
 
 <div class="container hidden" id="app-principal">
     <div class="search-box">
-        <button onclick="location.reload()" style="position:absolute; top:10px; right:10px; cursor:pointer; border:none; background:#eee; padding:5px 10px; border-radius:5px;">🚪 SAIR</button>
+        <button onclick="location.reload()" style="position:absolute; top:10px; right:10px; cursor:pointer; border:none; background:#eee; padding:5px 10px; border-radius:5px; font-weight:bold;">🚪 SAIR</button>
         <h2 style="color:var(--primary); margin:0;">Casa Segura</h2>
         <p style="font-size:12px; color:#666; margin-bottom:15px;">Acesso: <b id="label-perfil"></b></p>
         <input type="text" id="busca" placeholder="🔍 Digite o NOME do aluno para buscar...">
         <div id="area-adm" class="hidden" style="margin-top:10px;">
-            <button onclick="document.getElementById('painel-adm').classList.toggle('hidden')" style="font-size:10px; cursor:pointer;">⚙️ Painel Importar CSV</button>
+            <button onclick="document.getElementById('painel-adm').classList.toggle('hidden')" style="font-size:10px; cursor:pointer; background:none; border:1px solid #ccc; padding:2px 5px; border-radius:4px;">⚙️ Painel Importar CSV</button>
         </div>
     </div>
 
@@ -98,10 +99,11 @@
 
     <div id="painel-adm" class="hidden" style="text-align:center; margin-bottom: 20px;">
         <div class="card" style="margin:auto; border: 2px dashed #ccc; max-width: 450px;">
-            <h4>Importar CSV (UTF-8)</h4>
+            <h4>Importar CSV (Ajustado para Acentos)</h4>
+            <p style="font-size:11px; color:#666;">O sistema agora aceita arquivos do Excel com acentos.</p>
             <input type="file" id="csvFile" accept=".csv" style="margin-bottom:10px;">
             <button class="btn-escolha btn-espera" onclick="importarCSV()">IMPORTAR</button>
-            <button onclick="limparBase()" style="color:red; margin-top:15px; cursor:pointer; background:none; border:none; font-size:11px;">Esvaziar Banco de Dados</button>
+            <button onclick="limparBase()" style="color:red; margin-top:15px; cursor:pointer; background:none; border:none; font-size:11px; font-weight:bold;">Esvaziar Banco de Dados</button>
         </div>
     </div>
 </div>
@@ -124,8 +126,18 @@
     let unsubscribe = null;
     let acessoAtivo = "";
 
-    window.abrirSenha = (p) => { acessoAtivo = p; document.getElementById('box-escolha').classList.add('hidden'); document.getElementById('box-senha').classList.remove('hidden'); document.getElementById('txt-perfil').innerText = p === 'enfermagem' ? '⚕️ Enfermagem' : '🛋️ Sala de Espera'; };
-    window.voltarEscolha = () => { document.getElementById('box-escolha').classList.remove('hidden'); document.getElementById('box-senha').classList.add('hidden'); };
+    // NAVEGAÇÃO E LOGIN
+    window.abrirSenha = (p) => { 
+        acessoAtivo = p; 
+        document.getElementById('box-escolha').classList.add('hidden'); 
+        document.getElementById('box-senha').classList.remove('hidden'); 
+        document.getElementById('txt-perfil').innerText = p === 'enfermagem' ? '⚕️ Enfermagem' : '🛋️ Sala de Espera'; 
+        document.getElementById('input-senha').value = "";
+    };
+    window.voltarEscolha = () => { 
+        document.getElementById('box-escolha').classList.remove('hidden'); 
+        document.getElementById('box-senha').classList.add('hidden'); 
+    };
     window.conferirSenha = () => {
         const s = document.getElementById('input-senha').value;
         if((acessoAtivo === 'enfermagem' && s === '1234') || (acessoAtivo === 'espera' && s === '2026')) {
@@ -136,6 +148,7 @@
         } else { alert("Senha Errada!"); }
     };
 
+    // LÓGICA DE BUSCA
     document.getElementById('busca').addEventListener('input', (e) => {
         const termo = e.target.value.toLowerCase();
         const resDiv = document.getElementById('resultado');
@@ -152,6 +165,7 @@
                         return num ? `<div class="acoes-contato"><a href="tel:${num}" class="btn-link btn-tel">📞 Ligar</a><a href="https://wa.me/55${num}" target="_blank" class="btn-link btn-wpp">💬 Whats</a></div>` : '';
                     };
 
+                    // CARD ALUNO (Visível para Enfermagem e Sala de Espera)
                     let html = `
                         <div class="card card-aluno">
                             <span class="label">Aluno(a)</span>
@@ -171,13 +185,14 @@
                             </div>
                         </div>`;
 
+                    // CARD SAÚDE (Apenas Enfermagem)
                     if (acessoAtivo === 'enfermagem') {
                         html += `
                         <div class="card card-saude">
                             <div class="saude-title" style="color:var(--health); font-weight:bold; border-bottom:1px solid #eee; padding-bottom:5px;">⚕️ Ficha Médica</div>
                             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                                <div><span class="label">Emergência 1 (${d.CONTATO1_PARENTESCO || ''})</span><span class="data">${d.CONTATO1_NOME || '-'}</span>${btnC(d.CONTATO1_NOME)}</div>
-                                <div><span class="label">Emergência 2 (${d.CONTATO2_PARENTESCO || ''})</span><span class="data">${d.CONTATO2_NOME || '-'}</span>${btnC(d.CONTATO2_NOME)}</div>
+                                <div><span class="label">Emergência 1 (${d.CONTATO1_PARENTESCO || ''})</span><span class="data">${d.CONTATO1_NOME || '-'}</span></div>
+                                <div><span class="label">Emergência 2 (${d.CONTATO2_PARENTESCO || ''})</span><span class="data">${d.CONTATO2_NOME || '-'}</span></div>
                             </div>
                             <span class="label">Hospital e Plano</span>
                             <span class="data">${d.HOSPITAL_NOME || '-'}</span>
@@ -199,14 +214,33 @@
         });
     });
 
+    // IMPORTAÇÃO CORRIGIDA PARA ACENTOS
     window.importarCSV = () => {
         const file = document.getElementById('csvFile').files[0];
-        Papa.parse(file, { header: true, skipEmptyLines: true, complete: async (r) => {
-            for(const i of r.data) { if(i.NOME) await addDoc(collection(db, "alunos"), i); }
-            alert("Dados importados com sucesso!");
-        }});
+        if (!file) return alert("Selecione um arquivo CSV!");
+
+        Papa.parse(file, { 
+            header: true, 
+            skipEmptyLines: true, 
+            encoding: "ISO-8859-1", // ESTA LINHA CORRIGE OS ACENTOS DO EXCEL
+            complete: async (r) => {
+                for(const i of r.data) { 
+                    if(i.NOME) await addDoc(collection(db, "alunos"), i); 
+                }
+                alert("Importação concluída com acentos corrigidos!");
+                location.reload();
+            }
+        });
     };
-    window.limparBase = async () => { if(confirm("Apagar todos os alunos?")) { const s = await getDocs(collection(db, "alunos")); for(const d of s.docs) await deleteDoc(doc(db, "alunos", d.id)); alert("Base limpa!"); } };
+
+    window.limparBase = async () => { 
+        if(confirm("ATENÇÃO: Isso apagará todos os dados de alunos para importar novamente. Confirmar?")) { 
+            const s = await getDocs(collection(db, "alunos")); 
+            for(const d of s.docs) await deleteDoc(doc(db, "alunos", d.id)); 
+            alert("Base de dados esvaziada!"); 
+            location.reload();
+        } 
+    };
 </script>
 </body>
 </html>
